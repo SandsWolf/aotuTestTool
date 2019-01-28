@@ -28,8 +28,8 @@ public class AESUtil {
             FileInputStream fis = new FileInputStream(new File("../key.properties"));
             InputStreamReader in = new InputStreamReader (fis,"utf-8");
 
-            prop.load(in);	//加载文件输入流
-            in.close();		//关闭输入流
+            prop.load(in);
+            in.close();		
         } catch (Exception e) {
             e.printStackTrace();
         }
