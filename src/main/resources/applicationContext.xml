@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+<bean class="com.autoyol.util.EncryptPropertyPlaceholderConfigurer">
+	<property name="locations">
+		<list>
+			<value>classpath:jdbc.properties</value>
+		</list>
+	</property>
+</bean>
+
+<context:property-placeholder ignore-unresolvable="true" location="classpath*:jdbc.properties" />
+
+<bean id="dataSource" class="com.autoyol.util.LinkageRoutingDataSource" >
+    <property name="targetDataSources">
+        <map key-type="java.lang.String">
+            <!--通过不同的key决定用哪个dataSource-->
+            <entry value-ref="cloudDB" key="cloud_DB"></entry>
+            <entry value-ref="test1DB" key="test_1DB"></entry>
+            <entry value-ref="test2DB" key="test_2DB"></entry>
+            <entry value-ref="test3DB" key="test_3DB"></entry>
+            <entry value-ref="test4DB" key="test_4DB"></entry>
+            <entry value-ref="test5DB" key="test_5DB"></entry>
+			<entry value-ref="test9DB" key="test_9DB"></entry>
+            <entry value-ref="onlineDB" key="on_lineDB"></entry>
+			<entry value-ref="onlineHolidayDB" key="on_lineHolidayDB"></entry>
+        </map>
+    </property>
+    <property name="defaultTargetDataSource" ref="cloudDB">
+    </property>
+</bean>
+
+
+
+<bean id="cloudDB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${cloud_username}"></property>
+	<property name="password" value="${cloud_pwd}"></property>
+	<property name="url" value="${cloud_url}"></property>
+	<property name="driverClassName" value="${cloud_driver}"></property>
+</bean>
+
+<bean id="test1DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test1_username}"></property>
+	<property name="password" value="${test1_pwd}"></property>
+	<property name="url" value="${test1_url}"></property>
+	<property name="driverClassName" value="${test1_driver}"></property>
+</bean>
+
+<bean id="test2DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test2_username}"></property>
+	<property name="password" value="${test2_pwd}"></property>
+	<property name="url" value="${test2_url}"></property>
+	<property name="driverClassName" value="${test2_driver}"></property>
+</bean>
+
+<bean id="test3DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test3_username}"></property>
+	<property name="password" value="${test3_pwd}"></property>
+	<property name="url" value="${test3_url}"></property>
+	<property name="driverClassName" value="${test3_driver}"></property>
+</bean>
+
+<bean id="test4DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test4_username}"></property>
+	<property name="password" value="${test4_pwd}"></property>
+	<property name="url" value="${test4_url}"></property>
+	<property name="driverClassName" value="${test4_driver}"></property>
+</bean>
+
+<bean id="test5DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test5_username}"></property>
+	<property name="password" value="${test5_pwd}"></property>
+	<property name="url" value="${test5_url}"></property>
+	<property name="driverClassName" value="${test5_driver}"></property>
+</bean>
+
+<bean id="test9DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test9_username}"></property>
+	<property name="password" value="${test9_pwd}"></property>
+	<property name="url" value="${test9_url}"></property>
+	<property name="driverClassName" value="${test9_driver}"></property>
+</bean>
+
+<bean id="onlineDB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${online_username}"></property>
+	<property name="password" value="${online_pwd}"></property>
+	<property name="url" value="${online_url}"></property>
+	<property name="driverClassName" value="${online_driver}"></property>
+</bean>
+
+<bean id="onlineHolidayDB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${onlineHoliday_username}"></property>
+	<property name="password" value="${onlineHoliday_pwd}"></property>
+	<property name="url" value="${onlineHoliday_url}"></property>
+	<property name="driverClassName" value="${onlineHoliday_driver}"></property>
+</bean>
+
+
+
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	<property name="dataSource" ref="dataSource"/>
+</bean>
+
+<bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="mapperLocations" value="classpath*:com/autoyol/sql/*.xml"></property>
+</bean>
+
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<property name="basePackage" value="com.autoyol.dao"></property>
+</bean>
+
+<context:component-scan base-package="com.autoyol" />
+
+<mvc:annotation-driven />
+<mvc:default-servlet-handler/>
+
+
+
+
+</beans>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.V43Mapper">
+	<!-- 计算邮费和超里程费用的数据 -->
+	<select id="selectOrderMsg" parameterType="string" resultType="com.autoyol.entity.OrderInfo">
+		SELECT
+		  a.order_no order_no,
+		  a.renter_order_no renter_order_no,
+		  a.total_amt total_amt,
+		  a.owner_no owner_no,
+		  a.renter_no renter_no,
+		  m.`token` token,
+		  a.holiday_average holiday_average,
+		  a.rent_time rent_time,
+		  a.revert_time revert_time,
+		  a.status STATUS,
+		  a.car_no car_no,
+		  b.guide_day_price guide_day_price,
+		  b.oil_volume oil_volume,
+		  b.engine_type engine_type,
+		  a.settle settle,
+		  a.car_owner_type car_owner_type,
+		  c.day_miles_renter day_miles_renter,
+		  c.day_miles_owner day_miles_owner,
+		  c.get_car_mileage_owner get_car_mileage_owner,
+		  c.get_car_oil_scale_owner get_car_oil_scale_owner,
+		  c.return_car_mileage_owner return_car_mileage_owner,
+		  c.return_car_oil_scale_owner return_car_oil_scale_owner,
+		  c.get_car_mileage_renter get_car_mileage_renter,
+		  c.get_car_oil_scale_renter get_car_oil_scale_renter,
+		  c.return_car_mileage_renter return_car_mileage_renter,
+		  c.return_car_oil_scale_renter return_car_oil_scale_renter,
+		  c.mileage_cost_owner mileage_cost_owner,
+		  c.oil_cost_owner oil_cost_owner,
+		  c.new_owner_oil_subsidy new_owner_oil_subsidy,
+		  c.new_owner_oil_service_cost new_owner_oil_service_cost,
+		  c.mileage_cost_renter mileage_cost_renter,
+		  c.oil_cost_renter oil_cost_renter,
+		  c.oil_service_cost_owner oil_service_cost_owner,
+		  c.oil_service_cost_renter oil_service_cost_renter,
+		  d.molecule molecule
+		FROM trans a LEFT JOIN car b ON a.car_no=b.reg_no
+		LEFT JOIN trans_ext c ON a.order_no=c.order_no
+		LEFT JOIN oil_average_cost d ON b.engine_type=d.engine_type
+		LEFT JOIN member m ON a.renter_no = m.reg_no
+		WHERE a.order_no = #{order_no} AND d.`city_code`=
+		(SELECT IF ((SELECT COUNT(*) FROM oil_average_cost WHERE city_code=(SELECT city FROM trans WHERE order_no=#{order_no})>0),(SELECT city FROM trans WHERE order_no=#{order_no}),0))
+	</select>
+
+	<!--检查trans_ext是否存在-->
+	<select id="checkTransExt" parameterType="string" resultType="int">
+		SELECT count(*) from trans_ext where order_no = #{order_no}
+	</select>
+
+	<!-- 套餐订单的租客日均价 -->
+	<select id="selectRenterDayPrice" parameterType="string" resultType="int">
+		SELECT holiday_average FROM `trans_distribute` WHERE owner_order_no = #{order_no}
+	</select>
+	
+	<!--邮费服务费 -->
+	<select id="selectServiceCost" parameterType="string" resultType="string">
+		SELECT c_value FROM `sys_constant` WHERE c_code = #{c_name}
+	</select>
+	
+	<!-- 更新trans_ext表 -->
+	<update id="updateTrans_ext" parameterType="com.autoyol.entity.OrderInfo">
+		update trans_ext
+		<set>
+			<if test="day_miles_owner != null">
+				day_miles_owner = #{day_miles_owner},
+			</if>
+			<if test="day_miles_renter != null">
+				day_miles_renter = #{day_miles_renter},
+			</if>
+			<if test="get_car_mileage_owner != null">
+				get_car_mileage_owner = #{get_car_mileage_owner},
+			</if>
+			<if test="return_car_mileage_owner != null">
+				return_car_mileage_owner = #{return_car_mileage_owner},
+			</if>
+			<if test="get_car_oil_scale_owner != null">
+				get_car_oil_scale_owner = #{get_car_oil_scale_owner},
+			</if>
+			<if test="return_car_oil_scale_owner != null">
+				return_car_oil_scale_owner = #{return_car_oil_scale_owner},
+			</if>
+			<if test="get_car_mileage_renter != null">
+				get_car_mileage_renter = #{get_car_mileage_renter},
+			</if>
+			<if test="return_car_mileage_renter != null">
+				return_car_mileage_renter = #{return_car_mileage_renter},
+			</if>
+			<if test="get_car_oil_scale_renter != null">
+				get_car_oil_scale_renter = #{get_car_oil_scale_renter},
+			</if>
+			<if test="return_car_oil_scale_renter != null">
+				return_car_oil_scale_renter = #{return_car_oil_scale_renter}
+			</if>
+		</set>
+		where order_no = #{order_no}
+	</update>
+	
+	<!-- 初始化trans_ext -->
+	<update id="clearTrans_ext" parameterType="string">
+		update trans_ext set
+			get_car_mileage_owner = null,
+			return_car_mileage_owner = null,
+			get_car_oil_scale_owner = null,
+			return_car_oil_scale_owner = null,
+			get_car_mileage_renter = null,
+			return_car_mileage_renter = null,
+			get_car_oil_scale_renter = null,
+			return_car_oil_scale_renter = null
+		where order_no = #{order_no}
+	</update>
+	
+</mapper>

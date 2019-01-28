@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.TimeMapper">
+	<select id="selectCarBusyTimeList" parameterType="String" resultType="com.autoyol.entity.CarBusyTime">
+		SELECT id,begin_time,end_time,WEEK,is_open FROM `car_busy_time` WHERE car_no = #{car_no}
+	</select>	
+
+	<select id="selectCarFilterList" parameterType="String" resultType="String">
+		SELECT tv FROM car_filter WHERE car_no = #{car_no}
+	</select>
+	
+	<select id="selectTransFilterList" parameterType="String" resultType="com.autoyol.entity.TransFilter">
+		SELECT rent_time,revert_time,get_return_flag FROM trans_filter WHERE car_no = #{car_no}
+	</select>
+
+	<!-- "&lt;"=="<" "&gt;"==">"  -->
+	<select id="selectOrderSettingActivity" parameterType="Map" resultType="com.autoyol.entity.OrderSettingActivity">
+		SELECT activity_title,begin_date,end_date from order_setting_activity where begin_date &lt;= #{revertDate} and end_date &gt;= #{rentDate}
+	</select>
+
+	<select id="selectCarOrderSetting" parameterType="String" resultType="com.autoyol.entity.CarOrderSetting">
+		SELECT is_acceptance,rental_days from car_order_setting where car_no = #{car_no}
+	</select>
+
+	<select id="selectTansReplyList" parameterType="String"  resultType="com.autoyol.entity.TransReply">
+	    SELECT car_no,reply_min,reply_max FROM trans_reply WHERE car_no = #{car_no}
+	</select>
+
+	<select id="selectTansTimeLockList" parameterType="String"  resultType="com.autoyol.entity.TransTimeLock">
+	    SELECT order_no,car_no,status,rent_time,revert_time,rent_time_lock FROM trans WHERE car_no = #{car_no} and rent_time_lock='1'
+	</select>
+</mapper>

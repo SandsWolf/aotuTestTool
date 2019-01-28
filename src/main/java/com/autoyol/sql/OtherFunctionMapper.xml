@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.OtherFunctionMapper">
+	<!-- 查"上海"的违章押金结算时间配置表 -->
+	<select id="selectIllegalQueryDayConf" parameterType="String" resultType="com.autoyol.entity.IllegalQueryDayConf">
+		SELECT * FROM `illegal_query_day_conf` WHERE city_code = #{city}
+	</select>
+	
+	<!-- 加"上海"的违章押金结算时间配置表 -->
+	<insert id="insertIllegalQueryDayConf" parameterType="String">
+		INSERT INTO illegal_query_day_conf (city_code,illegal_query_day,trans_process_day) VALUES (#{city},'15','18')
+	</insert>
+	
+	<!-- 改"上海"的违章押金结算时间配置表 -->
+	<update id="updateIllegalQueryDayConf" parameterType="String">
+		 UPDATE illegal_query_day_conf SET trans_process_day = '18' WHERE city_code = #{city}
+	</update>
+	
+	<!-- 订单定时任务：transStatManageJobTrigger -->
+	<update id="updateTransTimedTask" parameterType="String">
+		UPDATE qrtz_triggers SET NEXT_FIRE_TIME = #{NEXT_FIRE_TIME} WHERE TRIGGER_NAME = 'transStatManageJobTrigger'
+	</update>
+
+	<!-- 查询订单定时任务时间戳 -->
+	<select id="selectTransNextFireTime" resultType="String">
+		SELECT NEXT_FIRE_TIME FROM `qrtz_triggers` WHERE `TRIGGER_NAME` = 'transStatManageJobTrigger'
+	</select>
+	
+	<!-- 违章定时任务：trans10HMessageIllegalTaskTrigger -->
+	<update id="updateIllegalTimedTask" parameterType="String">
+		UPDATE qrtz_triggers SET NEXT_FIRE_TIME = #{NEXT_FIRE_TIME} WHERE TRIGGER_NAME = 'trans10HMessageIllegalTaskTrigger'
+	</update>
+
+	<!-- 查询违章定时任务时间戳 -->
+	<select id="selectIllegalNextFireTime" resultType="String">
+		SELECT NEXT_FIRE_TIME FROM `qrtz_triggers` WHERE `TRIGGER_NAME` = 'trans10HMessageIllegalTaskTrigger'
+	</select>
+	
+	
+	<select id="selectTransModificationApplication" parameterType="String" resultType="com.autoyol.entity.TransModificationApplication">
+		SELECT 
+		  order_no,
+		  rent_time,
+		  revert_time,
+		  day_unit_price,
+		  holiday_price,
+		  rent_amt,
+		  is_original,
+		  car_no,
+		  create_time,
+		  confirm_flag,
+		  supamt_flag,
+		  delay_request_flag
+		FROM
+		  trans_modification_application 
+		WHERE order_no=#{order_no}
+	</select>
+
+
+	<select id="selectCityList" resultType="com.autoyol.entity.City">
+		SELECT name,code,delivery_service_cost,package_delivery_service_cost FROM city
+	</select>
+
+	<select id="selectCityByCode" parameterType="String" resultType="com.autoyol.entity.City">
+		SELECT name,code,delivery_service_cost,package_delivery_service_cost,address_range,free_address_range FROM city WHERE `code` = #{cityCode}
+	</select>
+
+
+	<!--&lt;!&ndash; 根据编码获取系统常量 &ndash;&gt;-->
+	<!--<select id="getSysConstantByCode" resultType="map">-->
+    	<!--select id,c_name,c_code,c_value from sys_constant sc where sc.c_code in (#{code})-->
+    <!--</select>-->
+
+
+	
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.ToolMapper">
+	<select id="selectToolsByBoxid" parameterType="String" resultType="com.autoyol.entity.Tool">
+		select tool_id,status,tool_name from tool where toolbox_id = #{toolboxId} and status = '1' ORDER BY tool_id
+	</select>
+	
+	<select id="selectTooldescById" parameterType="String" resultType="String">
+		select tool_desc from tool where tool_id = #{toolId}
+	</select>
+	
+
+
+	
+	
+	<!-- 测试用 -->
+	<select id="pathTest" parameterType="String" resultType="String">
+		SELECT real_name FROM member WHERE mobile = #{mobile}
+	</select>
+	
+</mapper>

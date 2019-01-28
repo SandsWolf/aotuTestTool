@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.TransMapper">
+	<select id="selectTransByorderNo" parameterType="String" resultType="com.autoyol.entity.Trans">
+		SELECT 
+		  id,
+		  order_no,
+		  STATUS,
+		  rent_time,
+		  revert_time,
+		  renter_no,
+		  renter_phone,
+		  total_amt,
+		  pay_flag,
+		  deposit_amt,
+		  deposit_pay_flag,
+		  real_revert_time,
+		  settle,
+		  is_dispatching,
+		  dispatching_renter_status,
+		  prepAuth_result,
+		  pay_time,
+		  operator_event,
+		  operate_time,
+		  owner_no,
+		  owner_phone,
+		  depositAuth_result,
+		  deposit_pay_time,
+		  city,
+		  car_no,
+		  rent_amt,
+		  renter_order_no,
+		  source
+		FROM
+		  trans 
+		WHERE order_no = #{order_no} 
+	</select>
+	
+	<!-- 修改实际还车时间 -->
+	<update id="updateRealRevertTime" parameterType="com.autoyol.entity.Trans">
+		UPDATE trans SET real_revert_time = #{real_revert_time} WHERE order_no = #{order_no}
+	</update>
+	
+	<!-- 管理后台支付'租车押金'数据 -->
+	<update id="payTotalAmt" parameterType="com.autoyol.entity.Trans">
+		UPDATE trans SET 
+		  status = #{status},
+		  pay_flag = #{pay_flag},
+		  dispatching_renter_status = #{dispatching_renter_status},
+		  prepAuth_result = #{prepAuth_result},
+		  pay_time = #{pay_time},
+		  operator_event = #{operator_event},
+		  operate_time = #{operate_time}
+		WHERE order_no = #{order_no}
+	</update>
+	
+	<!-- 管理后台支付'违章押金'数据 -->
+	<update id="payDepositAmt" parameterType="com.autoyol.entity.Trans">
+		UPDATE trans SET 
+		  status = #{status},
+		  deposit_pay_flag = #{deposit_pay_flag},
+		  dispatching_renter_status = #{dispatching_renter_status},
+		  operator_event = #{operator_event},
+		  depositAuth_result = #{depositAuth_result},
+		  deposit_pay_time = #{deposit_pay_time}
+		WHERE order_no = #{order_no}
+	</update>
+	
+	<!-- 管理后台支付租车押金时，添加trans_pay_offline表记录 -->
+	<insert id="insertTransPayOffline" parameterType="com.autoyol.entity.TransPayOffline">
+		INSERT INTO trans_pay_offline 
+		  (order_no,pay_kind,trans_kind,trans_type,trans_id,trans_time,trans_amt,qn,source,resp_msg,st,create_time,loop_time) 
+		VALUES 
+		  (#{order_no},#{pay_kind},#{trans_kind},#{trans_type},#{trans_id},#{trans_time},#{trans_amt},#{qn},#{source},#{resp_msg},#{st},#{create_time},#{loop_time})
+	</insert>
+	
+	<!-- 获取计算租金的数据 -->
+	<select id="selectDefaultRentAmtData" parameterType="String" resultType="com.autoyol.entity.RentAmtData">
+		SELECT 
+		  a.rent_time 'rent_time',
+		  a.revert_time 'revert_time',
+		  b.day_price 'day_price',
+		  b.holiday_price 'holiday_price'
+		FROM trans a LEFT JOIN car b ON a.car_no=b.reg_no WHERE a.order_no=#{order_no}
+	</select>
+	
+	<select id="selectTransLogList" parameterType="String" resultType="com.autoyol.entity.TransLog">
+		SELECT 
+		  id,
+		  STATUS,
+		  rent_time,
+		  revert_time,
+		  day_unit_price,
+		  holiday_price,
+		  rent_amt
+		FROM
+		  trans_log
+		WHERE order_no=#{order_no}
+	</select>
+
+	<select id="selectLastTransLog" parameterType="String" resultType="com.autoyol.entity.TransLog">
+		SELECT
+		  id,
+		  STATUS,
+		  rent_time,
+		  revert_time,
+		  day_unit_price,
+		  holiday_price,
+		  rent_amt,
+		  operate_time,
+		  update_time
+		FROM
+		  trans_log
+		WHERE order_no = #{order_no}
+		ORDER BY operate_time DESC
+		LIMIT 1
+	</select>
+
+
+	<select id="selectApplicationList" parameterType="String" resultType="com.autoyol.entity.TransModificationApplication">
+		SELECT
+		  id,
+		  car_no,
+		  rent_time,
+		  revert_time,
+		  day_unit_price,
+		  weekend_price,
+		  holiday_price,
+		  holiday_average,
+		  rent_amt,
+		  is_original,
+		  confirm_flag,
+		  operator_time,
+		  create_time
+		FROM
+		  trans_modification_application
+		WHERE order_no = #{order_no}
+		  AND confirm_flag = '1'
+	</select>
+
+	<select id="selectConsoleList" parameterType="String" resultType="com.autoyol.entity.TransModificationConsole">
+		SELECT
+		  id,
+		  car_no,
+		  rent_time,
+		  revert_time,
+		  day_unit_price,
+		  weekend_price,
+		  holiday_price,
+		  holiday_average,
+		  rent_amt,
+		  operator_time,
+		  create_time
+		FROM
+		  trans_modification_console
+		WHERE order_no = #{order_no}
+	</select>
+
+	<!--计算坐标到车的球面距离 -->
+	<select id="getDistanceFromCar" resultType="String">
+		SELECT
+		  6378.137*2*ASIN(SQRT(POW(SIN( (c.get_car_lat*PI()/180-#{lat}*PI()/180)/2),2)+COS(c.get_car_lat*PI()/180)*COS(#{lat}*PI()/180)* POW(SIN( (c.get_car_lon*PI()/180-#{lon}*PI()/180)/2),2))) AS distance
+		FROM car c WHERE c.`reg_no`=#{carNo}
+	</select>
+
+
+	<!--计算2个坐标之间的球面距离 -->
+	<select id="getDistance" resultType="String">
+		SELECT
+			6378.137*2*ASIN(SQRT(POW(SIN( (#{B_lat}*PI()/180-#{A_lat}*PI()/180)/2),2)+COS(#{B_lat}*PI()/180)*COS(#{A_lat}*PI()/180)* POW(SIN( (#{B_lon}*PI()/180-#{A_lon}*PI()/180)/2),2))) AS distance
+
+	</select>
+
+
+	<!-- 取还车峰值任务 -->
+	<update id="updateTrans">
+		UPDATE trans SET rent_time=#{rentTime},revert_time=#{revertTime} WHERE order_no = #{orderNo}
+	</update>
+
+
+	<delete id="deleteTransIllegalSettleUntreated" parameterType="String">
+		DELETE FROM trans_illegal_settle_untreated WHERE order_no = #{orderNo}
+	</delete>
+
+	<delete id="deleteTransIllegalSettleFlag" parameterType="String">
+		DELETE FROM trans_illegal_settle_flag WHERE order_no = #{orderNo}
+	</delete>
+
+	<insert id="insertTransIllegalSettleFlag" parameterType="string">
+		INSERT INTO trans_illegal_settle_flag (order_no,has_illegal,has_illegal_cost,create_time,update_time,update_op) VALUES (#{orderNo},'3','0',NOW(),NOW(),'admin')
+	</insert>
+
+
+
+
+
+
+
+	<!-- 取还车峰值任务 -->
+	<update id="TestUpdateTrans" parameterType="com.autoyol.entity.HolidayTime">
+		UPDATE trans SET rent_time=#{rent_time},revert_time=#{revert_time} WHERE order_no IN ('484366812171','448867912171','879980912171')
+	</update>
+	
+	<update id="updateCPIC" parameterType="com.autoyol.entity.HolidayTime">
+		UPDATE cpic_hrocloud_application SET termtime=#{termtime},returntime=#{returntime} WHERE orderno IN ('208646220171','408646220171')
+	</update>
+	
+	<select id="transCount" parameterType="com.autoyol.entity.HolidayTime" resultType="int">
+		SELECT COUNT(*) FROM trans t,car c WHERE  c.reg_no=t.car_no AND c.city='310100' 
+		AND (t.srv_get_flag=1 AND (t.rent_time>#{startTime} AND #{endTime}>t.rent_time) OR (t.srv_return_flag=1 AND t.revert_time>#{startTime} AND #{endTime}>t.revert_time)) AND (t.status>1 AND 13>t.status OR t.status=21)
+	</select>
+	
+	<select id="CpicCount" parameterType="com.autoyol.entity.HolidayTime" resultType="int">
+		SELECT COUNT(*) FROM `cpic_hrocloud_application` cha LEFT JOIN car c ON cha.carno=c.plate_num WHERE c.city='310100' AND 
+		(cha.twotype='gtake' AND (DATE_FORMAT(termtime,'%Y%m%d%H%i%s')>#{startTime} AND #{endTime}>DATE_FORMAT(termtime,'%Y%m%d%H%i%s')) OR (cha.twotype='gback' AND DATE_FORMAT(returntime,'%Y%m%d%H%i%s')>#{startTime} AND #{endTime}>DATE_FORMAT(returntime,'%Y%m%d%H%i%s'))) 
+		AND cha.is_delete=0
+	</select>
+
+
+	
+</mapper>

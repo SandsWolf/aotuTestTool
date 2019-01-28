@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.HolidayMapper">
+	<select id="selectHolidayList" resultType="String">
+		SELECT DATE_FORMAT(`date`,'%Y%m%d') 'date' FROM holiday order by `date`
+	</select>
+
+	<select id="selectHolidaySettingList" resultType="java.util.HashMap">
+		SELECT real_start_date,real_end_date FROM `holiday_setting` order by real_start_date
+	</select>
+
+	
+</mapper>

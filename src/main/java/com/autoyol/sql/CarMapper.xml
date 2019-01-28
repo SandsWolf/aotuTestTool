@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.CarMapper">
+    <select id="selectCarInfo" parameterType="String" resultType="com.autoyol.entity.Car">
+        SELECT
+          reg_no,
+          plate_num,
+          guide_purchase_price,
+          surplus_price,
+          city,
+          brand,
+          `type`,
+          get_car_lon,
+          get_car_lat,
+          is_local
+        FROM car
+        WHERE reg_no = #{carPara} OR plate_num = #{carPara}
+	</select>
+
+    <!--根据carNo连表查询计算"平台保障费" -->
+    <select id="selectInsureTotalPrices" parameterType="String" resultType="com.autoyol.entity.Car">
+        SELECT
+          a.reg_no,
+          a.guide_purchase_price,
+          b.guid_price_begin,
+          b.guid_price_end,
+          b.insurance_value
+        FROM
+          (SELECT
+            reg_no,
+            guide_purchase_price
+          FROM car
+          WHERE reg_no = #{carPara} OR plate_num = #{carPara}) a
+          LEFT JOIN
+          (SELECT
+            guid_price_begin,
+            guid_price_end,
+            insurance_value
+          FROM insurance_config) b
+        ON
+        (a.guide_purchase_price &gt; b.guid_price_begin
+        AND a.guide_purchase_price &lt;= b.guid_price_end)
+        OR
+        (a.guide_purchase_price &gt; b.guid_price_begin
+        AND b.guid_price_end = -1)
+    </select>
+
+
+    <!--根据carNo链表查询计算车辆押金费用（cityCode匹配） -->
+    <select id="selectCarDepositAmtInCityCode" parameterType="String" resultType="com.autoyol.entity.DepositConfig">
+        SELECT
+          a.reg_no,# 'carNo'
+          b.deposit_type,
+          b.deposit_value,#  '押金金额'
+          b.city_code,
+          a.city,
+          a.surplus_price,# '车辆残值'
+          b.purchase_price_begin,
+          b.purchase_price_end
+        FROM
+          (SELECT
+            reg_no,
+            surplus_price,
+            city
+          FROM
+            car
+          WHERE reg_no = #{carNo}) a
+          LEFT JOIN
+            (SELECT
+                deposit_type,
+                purchase_price_begin,
+                purchase_price_end,
+                deposit_value,
+                city_code
+            FROM
+              deposit_config WHERE deposit_type='1') b
+            ON a.surplus_price &gt;= b.purchase_price_begin
+            AND a.surplus_price &lt; b.purchase_price_end
+        WHERE b.city_code =
+            (SELECT
+              IF (
+                (SELECT
+                  COUNT(*)
+                FROM
+                    deposit_config
+                WHERE city_code =
+                    (SELECT
+                      city
+                    FROM
+                      car
+                    WHERE reg_no = #{carNo})) &gt; 0,
+                        (SELECT
+                          city
+                        FROM
+                          car
+                        WHERE reg_no = #{carNo}),
+                    '0'
+            ))
+    </select>
+
+
+    <!--根据carNo链表查询计算车辆押金费用（cityCode不匹配） -->
+    <select id="selectCarDepositAmtOutCityCode" parameterType="String" resultType="com.autoyol.entity.DepositConfig">
+        SELECT
+          a.reg_no,# 'carNo'
+          b.deposit_type,
+          b.deposit_value,#  '押金金额'
+          b.city_code,
+          a.city,
+          a.surplus_price,# '车辆残值'
+          b.purchase_price_begin,
+          b.purchase_price_end
+        FROM
+          (SELECT
+            reg_no,
+            surplus_price,
+            city
+          FROM
+            car
+          WHERE reg_no = #{carNo}) a
+          LEFT JOIN
+            (SELECT
+                deposit_type,
+                purchase_price_begin,
+                purchase_price_end,
+                deposit_value,
+                city_code
+            FROM
+              deposit_config WHERE deposit_type='3') b
+            ON a.surplus_price &gt;= b.purchase_price_begin
+            AND a.surplus_price &lt; b.purchase_price_end
+        WHERE b.city_code = '0'
+    </select>
+
+    <!--获取押金配置表 -->
+    <select id="selectIDepositTextCode" resultType="com.autoyol.entity.DepositConfig">
+        SELECT deposit_type,purchase_price_begin,purchase_price_end,deposit_value,city_code,multiple FROM deposit_config
+    </select>
+
+
+
+
+</mapper>

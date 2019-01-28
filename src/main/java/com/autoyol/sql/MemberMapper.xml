@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.autoyol.dao.MemberMapper">
+	<update id="updateMemberInfo" parameterType="String">
+		UPDATE member SET 
+			real_name='张飞',
+			first_name='张',
+			gender=1,
+			id_no='330621199005082152',
+			dri_lic_no=CONCAT('4602001',member.`mobile`),
+			id_card_auth=2,
+			id_card_st_time='2016-05-03 14:35:59',
+			dri_lic_auth=2,
+			dri_vice_lic_auth=2,
+			dri_lic_st_time='2016-05-03 14:36:50',
+			dri_lic_valid='2020-05-03',
+			dri_lic_allow_car='C1',
+			dri_lic_record_no='123456789012',
+			auth_step='5',
+			rent_flag=1,
+			op_time='2016-05-03 14:36:50',
+			renter_check_memo='审核通过！',
+			dri_lic_first_time='2012-05-03',
+			start_validity_period='2012-05-03',
+			quasi_driving_type='C1' 
+		WHERE mobile = #{mobile}
+	</update>
+	
+	
+	<select id="selectMemberInfoByMobile" parameterType="String" resultType="com.autoyol.entity.Member">
+		SELECT 
+		  reg_no,
+		  mobile,
+		  id_card_auth,
+		  dri_lic_auth,
+		  dri_vice_lic_auth,
+		  rent_flag,
+		  token,
+		  dri_lic_first_time,
+		  internal_staff
+		FROM
+		  member  WHERE mobile = #{mobile}
+	</select>
+
+
+	<select id="selectCommUseDrivers" parameterType="String" resultType="com.autoyol.entity.CommUseDriver">
+		SELECT
+		  mem_no,
+		  realName,
+		  mobile,
+		  id_card,
+		  dri_lic_allow_car,
+		  is_auth,
+		  is_delete
+		FROM
+		  comm_use_driver  WHERE mem_no = #{memNo} AND is_auth='1' AND is_delete='0'
+	</select>
+
+	
+</mapper>
