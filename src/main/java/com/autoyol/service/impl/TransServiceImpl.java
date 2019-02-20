@@ -811,6 +811,7 @@ public class TransServiceImpl implements TransService{
 				updateData.setCarNo(rentAmtDataList.get(i).getCarNo());
 				updateData.setType(rentAmtDataList.get(i).getType());
 				updateData.setId(rentAmtDataList.get(i).getId());
+				updateData.setUpdateFlag("0");
 				updateDataList.add(updateData);
 
 				RentAmtData rentAmtData = new RentAmtData();                                //阶段数据：开始时间，结束时间，平日价，节假日价

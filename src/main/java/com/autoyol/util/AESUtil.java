@@ -29,7 +29,7 @@ public class AESUtil {
             InputStreamReader in = new InputStreamReader (fis,"utf-8");
 
             prop.load(in);
-            in.close();		
+            in.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

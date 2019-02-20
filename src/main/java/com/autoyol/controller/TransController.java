@@ -483,16 +483,16 @@ public class TransController {
 			logger.info("transData:{}" + JSON.toJSONString(transData));
 
 			if (!StringUtils.isEmpty(transData.get("rentTime")) && !StringUtils.isEmpty(transData.get("revertTime")) && !StringUtils.isEmpty(transData.get("dayPrice")) && !StringUtils.isEmpty(transData.get("holiydaPrice"))) {
-				if (transData.get("rentTime") != null & !StringUtils.isEmpty(transData.get("rentTime")) & !ToolUtil.isTransTime(transData.get("rentTime"))) {
-					logger.info("index：{}",index + ":3");
-					result = ToolUtil.checkRentTime(transData.get("rentTime"));
-					return result;
-				}
-				if (transData.get("revertTime") != null & !StringUtils.isEmpty(transData.get("revertTime")) & !ToolUtil.isTransTime(transData.get("revertTime"))) {
-					logger.info("index：{}",index + ":3");
-					result = ToolUtil.checkRentTime(transData.get("revertTime"));
-					return result;
-				}
+//				if (transData.get("rentTime") != null & !StringUtils.isEmpty(transData.get("rentTime")) & !ToolUtil.isTransTime(transData.get("rentTime"))) {
+//					logger.info("index：{}",index + ":3");
+//					result = ToolUtil.checkRentTime(transData.get("rentTime"));
+//					return result;
+//				}
+//				if (transData.get("revertTime") != null & !StringUtils.isEmpty(transData.get("revertTime")) & !ToolUtil.isTransTime(transData.get("revertTime"))) {
+//					logger.info("index：{}",index + ":3");
+//					result = ToolUtil.checkRentTime(transData.get("revertTime"));
+//					return result;
+//				}
 
 				transList.add(transData);
 			}
