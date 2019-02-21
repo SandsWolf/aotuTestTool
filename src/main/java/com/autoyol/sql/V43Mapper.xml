@@ -39,7 +39,8 @@
 		  c.oil_cost_renter oil_cost_renter,
 		  c.oil_service_cost_owner oil_service_cost_owner,
 		  c.oil_service_cost_renter oil_service_cost_renter,
-		  d.molecule molecule
+		  d.molecule molecule,
+		  d.denominator denominator
 		FROM trans a LEFT JOIN car b ON a.car_no=b.reg_no
 		LEFT JOIN trans_ext c ON a.order_no=c.order_no
 		LEFT JOIN oil_average_cost d ON b.engine_type=d.engine_type

@@ -706,7 +706,8 @@ public class CostServiceImpl implements CostService {
 //        Double rentDate = util.getRentDate(order.getRent_time(), order.getRevert_time());		//租期
         Double rentDate = ToolUtil.getRentDate(orderInfo.getRent_time(), orderInfo.getRevert_time());   //租期
         Integer fuelSize = orderInfo.getOil_volume();												//油箱容量
-        Double gasPrice = orderInfo.getMolecule() / 10d;											//油价
+//        Double gasPrice = orderInfo.getMolecule() / 10d;											//油价
+        Double gasPrice = Double.valueOf(orderInfo.getMolecule() / orderInfo.getDenominator());		//油价
         Integer serviceCost = orderInfo.getServiceCost();											//油量服务费
         Integer totalAmt = orderInfo.getTotal_amt();												//车辆押金
         String renterToken = orderInfo.getToken();													//租客token

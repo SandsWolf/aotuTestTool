@@ -32,7 +32,8 @@ public class OrderInfo {
     private Integer guide_day_price;				//car表"日租金指导价"
 
     private Integer oil_volume;					//油箱容量
-    private Integer molecule;					//能源价格(分子)
+    private Integer molecule;					//油价分子
+    private Integer denominator;                //油价分母
     private Integer serviceCost;				//油量服务费
 
     private Integer mileage_cost_owner;			//车主超里程费用
@@ -44,6 +45,14 @@ public class OrderInfo {
     private Integer oil_cost_renter;			//租客油费
     private Integer oil_service_cost_owner;		//车主端加油服务费
     private Integer oil_service_cost_renter;	//租客端加油服务费
+
+    public Integer getDenominator() {
+        return denominator;
+    }
+
+    public void setDenominator(Integer denominator) {
+        this.denominator = denominator;
+    }
 
     public Integer getNew_owner_oil_subsidy() {
         return new_owner_oil_subsidy;
