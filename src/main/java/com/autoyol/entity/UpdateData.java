@@ -8,6 +8,7 @@ public class UpdateData {
     private String totalDayRentDate;        //平日价所占租期（小时）
     private String totalWeekendRentDate;    //周末价所占租期（小时）
     private String totalHolidayRentDate;    //节假日价所占租期（小时）
+    private String totalSpringRentDate;     //春节价所占租期（小时）
     private String rentDate;                //所处阶段租期（天）
     private String avgDayPrice;             //订单日均价
     private String avgHourPrice;            //订单时均价
@@ -24,11 +25,37 @@ public class UpdateData {
     private String carDayPrice;             //所处阶段时车辆平日价
     private String carWeekendPrice;         //所处阶段时车辆周末价
     private String carHolidayPrice;         //所处阶段时车辆节假日价
+    private String carSpringPrice;          //所处阶段时车辆春节价
+    private String useSpecialPriceFlag;     //是否使用特供价flag
     private String carNo;
     private Integer type;                   //修改订单用：数据类型：1.trans_modification_application表数据  2.trans_modification_console表数据
     private String id;                      //对应表中数据的id
     private String updateFlag;              //修复重新计算flag    1：有重新计算  0：无重新计算
     private String msg;                     //前端提示信息
+
+    public String getUseSpecialPriceFlag() {
+        return useSpecialPriceFlag;
+    }
+
+    public void setUseSpecialPriceFlag(String useSpecialPriceFlag) {
+        this.useSpecialPriceFlag = useSpecialPriceFlag;
+    }
+
+    public String getTotalSpringRentDate() {
+        return totalSpringRentDate;
+    }
+
+    public void setTotalSpringRentDate(String totalSpringRentDate) {
+        this.totalSpringRentDate = totalSpringRentDate;
+    }
+
+    public String getCarSpringPrice() {
+        return carSpringPrice;
+    }
+
+    public void setCarSpringPrice(String carSpringPrice) {
+        this.carSpringPrice = carSpringPrice;
+    }
 
     public String getCarWeekendPrice() {
         return carWeekendPrice;

@@ -354,7 +354,7 @@ public class ToolUtil {
 	 * @param holidayList
 	 * @return
 	 */
-	public List<Day> getrentDayList(String startTime, String endTime, List<String> holidayList){
+	public List<Day> getrentDayList(String startTime, String endTime, List<String> holidayList, List<String> springHolidayList){
 		List<Day> rentDayList = new ArrayList<Day>();	//统计租期内日期（精确到天）list：startDay和endDay的'timeDate'字段有值（真实起租和还车时间）
 
 		String startTimeDay = startTime.substring(0,8) + "000000";
@@ -396,10 +396,25 @@ public class ToolUtil {
 //				day.setIs_special(0);
 //				day.setDayDate(rentDayList.get(i).getDayDate());
 //			}
-			if(holidayList.contains(rentDayList.get(i).getDayDate())){	// 节日
+
+//			if(holidayList.contains(rentDayList.get(i).getDayDate())){	// 节日
+//				day.setIs_special(1);
+//				day.setDayDate(rentDayList.get(i).getDayDate());
+//			}else if(!holidayList.contains(rentDayList.get(i).getDayDate()) && isWeekend(rentDayList.get(i).getDayDate())){		// 周末
+//				day.setIs_special(2);
+//				day.setDayDate(rentDayList.get(i).getDayDate());
+//			} else {	// 平日
+//				day.setIs_special(0);
+//				day.setDayDate(rentDayList.get(i).getDayDate());
+//			}
+
+			if (springHolidayList.contains(rentDayList.get(i).getDayDate())) { // 春节
+				day.setIs_special(3);
+				day.setDayDate(rentDayList.get(i).getDayDate());
+			} else if (holidayList.contains(rentDayList.get(i).getDayDate())){	// 节日
 				day.setIs_special(1);
 				day.setDayDate(rentDayList.get(i).getDayDate());
-			}else if(!holidayList.contains(rentDayList.get(i).getDayDate()) && isWeekend(rentDayList.get(i).getDayDate())){		// 周末
+			} else if (!holidayList.contains(rentDayList.get(i).getDayDate()) && isWeekend(rentDayList.get(i).getDayDate())){		// 周末
 				day.setIs_special(2);
 				day.setDayDate(rentDayList.get(i).getDayDate());
 			} else {	// 平日

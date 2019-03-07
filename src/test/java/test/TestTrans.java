@@ -3,6 +3,7 @@ package test;
 import com.alibaba.fastjson.JSON;
 import com.autoyol.dao.*;
 import com.autoyol.entity.PathIP;
+import com.autoyol.entity.RentAmtData;
 import com.autoyol.entity.Result;
 import com.autoyol.entity.Trans;
 import com.autoyol.service.*;
@@ -112,7 +113,7 @@ public class TestTrans {
         SetDateSourceUtil.setDataSourceName(environment);
         PathIP pathIP = ToolUtil.getIP(environment);
 
-        List<String> totalHolidayList = transService.getHolidayList(pathIP);
+        List<String> totalHolidayList = transService.getHolidayList(pathIP, 0);
 
         System.out.println("----totalHolidayList:" + JSON.toJSONString(totalHolidayList));
 
@@ -125,16 +126,13 @@ public class TestTrans {
 
 
     public static void main(String[] args) {
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
+        String a = "0";
+        String b = "100";
+        RentAmtData rentAmtData = new RentAmtData();
 
-        for (int i = (list.size()-1); i >= 0; i--) {
-            System.out.println(list.get(i));
-        }
+        rentAmtData.setDay_price("0".equals(a) ? b : a);
+
+        System.out.println(rentAmtData.getDay_price());
     }
 
 

@@ -6,4 +6,5 @@ import java.util.Map;
 public interface HolidayMapper {
 	public List<String> selectHolidayList ();
 	public List<Map<String,Long>> selectHolidaySettingList ();
+	public List<Map<String,Long>> selectSpringHolidaySettingList ();
 }

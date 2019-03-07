@@ -316,7 +316,7 @@ public class TransController {
 
 		RentAmtData rentAmtData = transMapper.selectDefaultRentAmtData(order_no);	//获取计算租金的默认参数，当"trans_log"表没关联数据时使用
 //		List<String> holidayList = holidayMapper.selectHolidayList();					//节假日list
-		List<String> holidayList = transService.getHolidayList(pathIP);					//节假日list
+		List<String> holidayList = transService.getHolidayList(pathIP,0);					//节假日list
 		Trans trans = transMapper.selectTransByorderNo(order_no);					//getTransData
 		List<TransLog> transLoglist = transMapper.selectTransLogList(order_no);	//getTransList
 		if(rentAmtData==null){
@@ -364,12 +364,12 @@ public class TransController {
 	}
 
 	/**
-	 * 计算租金
+	 * 计算租金（不带周末价，不带特供价）
 	 * @param environment
-	 * @param startTime		订单开始时间
-	 * @param endTime		订单结束时间
-	 * @param dayPrice		车辆平日价
-	 * @param holiydaPrice	车辆节假日价
+	 * @param startTime
+	 * @param endTime
+	 * @param dayPrice
+	 * @param holiydaPrice
 	 * @return
 	 */
 	@RequestMapping("/computerentAmt")
@@ -381,7 +381,7 @@ public class TransController {
 		Result result = new Result();
 
 //		List<String> holidayList = holidayMapper.selectHolidayList();		//节假日list
-		List<String> holidayList = transService.getHolidayList(pathIP);		//节假日list
+		List<String> holidayList = transService.getHolidayList(pathIP,0);		//节假日list
 
 		if(holidayList.size()==0){
 			result.setStatus(0);
@@ -414,6 +414,16 @@ public class TransController {
 	}
 
 
+	/**
+	 * 计算租金（带周末价，不带特供价）
+	 * @param environment
+	 * @param startTime
+	 * @param endTime
+	 * @param dayPrice
+	 * @param weekendPrice
+	 * @param holiydaPrice
+	 * @return
+	 */
 	@RequestMapping("/computerentAmtv2")
 	@ResponseBody
 	public Result computeRentAmtWithWeekend (String environment, String startTime, String endTime, String dayPrice, String weekendPrice, String holiydaPrice){
@@ -423,7 +433,7 @@ public class TransController {
 		Result result = new Result();
 
 //		List<String> holidayList = holidayMapper.selectHolidayList();		//节假日list
-		List<String> holidayList = transService.getHolidayList(pathIP);		//节假日list
+		List<String> holidayList = transService.getHolidayList(pathIP,0);		//节假日list
 
 		if(holidayList.size()==0){
 			result.setStatus(0);
@@ -458,8 +468,63 @@ public class TransController {
 
 
 	/**
+	 * 计算租金（带周末价，带特供价）
+	 * @param environment
+	 * @param startTime
+	 * @param endTime
+	 * @param dayPrice
+	 * @param weekendPrice
+	 * @param holiydaPrice
+	 * @param springPrice
+	 * @return
+	 */
+	@RequestMapping("/computerentAmtv3")
+	@ResponseBody
+	public Result computeRentAmtWithSpecialPrice (String environment, String startTime, String endTime, String dayPrice, String weekendPrice, String holiydaPrice, String springPrice){
+		SetDateSourceUtil.setDataSourceName(environment);
+		PathIP pathIP = ToolUtil.getIP(environment);
+		Result result = new Result();
+
+		List<String> holidayList = transService.getHolidayList(pathIP,0);			//节日list
+		List<String> springHolidayList = transService.getHolidayList(pathIP,1);	//春节list
+
+		if(holidayList.size()==0){
+			result.setStatus(0);
+			result.setMsg("success");
+			result.setData("\"holiday_setting\"表数据不存在，请检查数据是否正确");
+			return result;
+		}
+
+//		for(int i=0;i<holidayList.size();i++){		//转换节假日表时间格式，待用。时间格式为yyyyMMddHHmmss
+//			holidayList.set(i, holidayList.get(i) + "000000");
+//		}
+		logger.info("节假日list：{}" + holidayList.toString());
+		Map<String,String> map = transService.getRentAmtWithSpecialPrice(springHolidayList,holidayList, Double.parseDouble(dayPrice),Double.parseDouble(weekendPrice), Double.parseDouble(holiydaPrice),Double.parseDouble(springPrice), startTime, endTime);
+
+		String resultMsg = "订单开始时间：<span class='sign_span' style='color:red;'>" + ToolUtil.getTime1(Long.parseLong(ToolUtil.getTimestamp(startTime))) + "</span><br>" +
+				"订单结束时间：<span class='sign_span' style='color:red;'>" + ToolUtil.getTime1(Long.parseLong(ToolUtil.getTimestamp(endTime))) + "</span><br>" +
+				"总小时数：<span class='sign_span' style='color:red;'>" + map.get("totalH")+"</span>小时<br>" +
+				"平日价所占租期：<span class='sign_span' style='color:red;'>" + map.get("totalDayRentDate") + "</span>小时<br>" +
+				"周末价所占租期：<span class='sign_span' style='color:red;'>" + map.get("totalWeekendRentDate") + "</span>小时<br>" +
+				"节假日价所占租期：<span class='sign_span' style='color:red;'>" + map.get("totalHolidayRentDate") + "</span>小时<br>" +
+				"春节日价所占租期：<span class='sign_span' style='color:red;'>" + map.get("totalSpringRentDate") + "</span>小时<br>" +
+				"租期：<span class='sign_span' style='color:red;'>" + map.get("rentDate") + "</span>天<br><br>" +
+				"订单日均价：<span class='sign_span' style='color:red;'>" + map.get("avgDayPrice") + "</span>元<br>" +
+				"订单时均价：<span class='sign_span' style='color:red;'>" + map.get("avgHourPrice") + "</span>元<br>" +
+				"租期天数：<span class='sign_span' style='color:red;'>" + map.get("t") + "</span>天<br>" +
+				"剩余小时数：<span class='sign_span' style='color:red;'>" + map.get("h") + "</span>小时<br>" +
+				"租金（<span class='sign_span' style='color:red;'>规则：日均价 * 租期天数 + 时均价 * 剩余小时数</span>）为：<span class='sign_span' style='color:red;'>" + map.get("rentAmt") + "</span>元<br><br><br>";
+		result.setStatus(0);
+		result.setMsg("success");
+		result.setData(resultMsg);
+		return result;
+	}
+
+
+	/**
 	 * 计算修改订单后的租车押金
 	 * @param environment
+	 * @param mapJson	rentAmtType：  0:不带周末，不带春节（2段）  1:带周末，不带春节（3段）  2:使用特供价（4段）
 	 * @return
 	 */
 	@RequestMapping("/updateTrans")
@@ -474,7 +539,7 @@ public class TransController {
 		Map<String, Object> map = (Map)JSON.parseObject(mapJson);
 		logger.info("map:{}" + JSON.toJSONString(map));
 
-		int rentAmtType = Integer.parseInt((String) map.get("rentAmtType"));	// 计算租金类型：1-带周末价  0-不带周末价
+		int rentAmtType = Integer.parseInt((String) map.get("rentAmtType"));	// 计算租金类型：0-不带周末，不带春节（2段）  1-带周末，不带春节（3段）  2-使用特供价（4段）
 
 		List<Map<String,String>> transList = new ArrayList<>();
 		for (int i = 0; i < (map.size() - 1); i++) {
@@ -500,7 +565,8 @@ public class TransController {
 		logger.info("transList:{}" + JSON.toJSONString(transList));
 
 //		List<String> holidayList = holidayMapper.selectHolidayList();		//节假日list
-		List<String> holidayList = transService.getHolidayList(pathIP);		//节假日list
+		List<String> holidayList = transService.getHolidayList(pathIP,0);				//节日日期list
+		List<String> springHolidayList = transService.getHolidayList(pathIP,1);		//春节日期list
 		List<RentAmtData> rentAmtDataList = new ArrayList<RentAmtData>();
 
 		if(holidayList.size()==0){
@@ -514,6 +580,7 @@ public class TransController {
 //			holidayList.set(i, holidayList.get(i) + "000000");
 //		}
 		logger.info("节假日list：{}" + holidayList.toString());
+		logger.info("春节list：{}" + springHolidayList.toString());
 
 		String carNo = "1";
 		for (int i = 0; i <transList.size(); i++) {
@@ -521,16 +588,22 @@ public class TransController {
 				RentAmtData rentAmtData = new RentAmtData();
 				rentAmtData.setRent_time(transList.get(i).get("rentTime"));
 				rentAmtData.setRevert_time(transList.get(i).get("revertTime"));
+				if (rentAmtType == 2) {
+					rentAmtData.setUse_special_price_flag("1");
+				} else {
+					rentAmtData.setUse_special_price_flag("0");
+				}
 				rentAmtData.setDay_price(transList.get(i).get("dayPrice"));
 				rentAmtData.setWeekend_price(transList.get(i).get("weekendPrice"));
 				rentAmtData.setHoliday_price(transList.get(i).get("holiydaPrice"));
+				rentAmtData.setSpring_price(transList.get(i).get("springPrice"));
 				rentAmtData.setCarNo(carNo);
 				rentAmtDataList.add(rentAmtData);
 			}
 		}
 		logger.info("rentAmtDataList:{}",JSON.toJSON(rentAmtDataList));
 
-		List<UpdateData> updateDataList = transService.updateTrans(holidayList,rentAmtDataList,rentAmtType);
+		List<UpdateData> updateDataList = transService.updateTrans(springHolidayList, holidayList,rentAmtDataList,rentAmtType);
 		logger.info("updateDataList:{}",JSON.toJSON(updateDataList));
 
 		result.setStatus(0);
@@ -545,6 +618,7 @@ public class TransController {
 	 * 校验修改订单租金
 	 * @param environment
 	 * @param order_no
+	 * @param rentAmtType	0:不带周末，不带春节（2段）  1:带周末，不带春节（3段）  2:使用特供价（4段）
 	 * @return
 	 */
 	@RequestMapping("/newCheckrentAmt")
@@ -577,8 +651,9 @@ public class TransController {
 		List<RentAmtData> rentAmtDataList = new ArrayList<RentAmtData>();       			//数据源List
 		List<UpdateData> updateDataList = new ArrayList<UpdateData>();          			//修改订单计算后数据List
 		Map<String,Object> map = new HashMap<String,Object>();
-//		List<String> holidayList = holidayMapper.selectHolidayList();		//节假日list
-		List<String> holidayList = transService.getHolidayList(pathIP);		//节假日list
+//		List<String> holidayList = holidayMapper.selectHolidayList();						//节假日list
+		List<String> holidayList = transService.getHolidayList(pathIP,0);				//节假日list
+		List<String> springHolidayList = transService.getHolidayList(pathIP,1);		//春节list
 		Trans trans = transMapper.selectTransByorderNo(order_no);					//getTransData
 		if(trans == null){
 			result.setStatus(0);
@@ -603,9 +678,18 @@ public class TransController {
 
 		for (int i = 0; i < applicationList.size(); i++) {
 			RentAmtData rentAmtData  = new RentAmtData();
-			rentAmtData.setDay_price(applicationList.get(i).getDay_unit_price());
-			rentAmtData.setWeekend_price(applicationList.get(i).getWeekend_price());
-			rentAmtData.setHoliday_price(applicationList.get(i).getHoliday_price());
+			rentAmtData.setUse_special_price_flag(applicationList.get(i).getUse_special_price());
+			if ("1".equals(applicationList.get(i).getUse_special_price())) {	//使用特供价
+				rentAmtData.setDay_price("0".equals(applicationList.get(i).getOrdinary_days_special_price()) ? applicationList.get(i).getDay_unit_price() : applicationList.get(i).getOrdinary_days_special_price());
+				rentAmtData.setWeekend_price("0".equals(applicationList.get(i).getWeekend_special_price()) ? applicationList.get(i).getWeekend_price() : applicationList.get(i).getWeekend_special_price());
+				rentAmtData.setHoliday_price("0".equals(applicationList.get(i).getHoliday_special_price()) ? applicationList.get(i).getHoliday_price() : applicationList.get(i).getHoliday_special_price());
+				rentAmtData.setSpring_price(applicationList.get(i).getSpring_festival_special_price());
+			} else if ("0".equals(applicationList.get(i).getUse_special_price())){	//不使用特供价
+				rentAmtData.setDay_price(applicationList.get(i).getDay_unit_price());
+				rentAmtData.setWeekend_price(applicationList.get(i).getWeekend_price());
+				rentAmtData.setHoliday_price(applicationList.get(i).getHoliday_price());
+				rentAmtData.setSpring_price("0");
+			}
 			rentAmtData.setRent_time(applicationList.get(i).getRent_time());
 			rentAmtData.setRevert_time(applicationList.get(i).getRevert_time());
 			rentAmtData.setCarNo(applicationList.get(i).getCar_no());
@@ -616,9 +700,18 @@ public class TransController {
 		}
 		for (int i = 0; i < consoleList.size(); i++) {
 			RentAmtData rentAmtData  = new RentAmtData();
-			rentAmtData.setDay_price(consoleList.get(i).getDay_unit_price());
-			rentAmtData.setWeekend_price(consoleList.get(i).getWeekend_price());
-			rentAmtData.setHoliday_price(consoleList.get(i).getHoliday_price());
+			rentAmtData.setUse_special_price_flag(consoleList.get(i).getUse_special_price());
+			if ("1".equals(consoleList.get(i).getUse_special_price())) {	//使用特供价
+				rentAmtData.setDay_price("0".equals(consoleList.get(i).getOrdinary_days_special_price()) ? consoleList.get(i).getDay_unit_price() : consoleList.get(i).getOrdinary_days_special_price());
+				rentAmtData.setWeekend_price("0".equals(consoleList.get(i).getWeekend_special_price()) ? consoleList.get(i).getWeekend_price() : consoleList.get(i).getWeekend_special_price());
+				rentAmtData.setHoliday_price("0".equals(consoleList.get(i).getHoliday_special_price()) ? consoleList.get(i).getHoliday_price() : consoleList.get(i).getHoliday_special_price());
+				rentAmtData.setSpring_price(consoleList.get(i).getSpring_festival_special_price());
+			} else if ("0".equals(consoleList.get(i).getUse_special_price())) {		//不使用特供价
+				rentAmtData.setDay_price(consoleList.get(i).getDay_unit_price());
+				rentAmtData.setWeekend_price(consoleList.get(i).getWeekend_price());
+				rentAmtData.setHoliday_price(consoleList.get(i).getHoliday_price());
+				rentAmtData.setSpring_price("0");
+			}
 			rentAmtData.setRent_time(consoleList.get(i).getRent_time());
 			rentAmtData.setRevert_time(consoleList.get(i).getRevert_time());
 			rentAmtData.setCarNo(consoleList.get(i).getCar_no());
@@ -644,7 +737,7 @@ public class TransController {
 			rentAmtDataList = Arrays.asList(rentAmtDatas);
 		}
 
-		updateDataList = transService.updateTrans(holidayList,rentAmtDataList,Integer.parseInt(rentAmtType));
+		updateDataList = transService.updateTrans(springHolidayList,holidayList,rentAmtDataList,Integer.parseInt(rentAmtType));
 
 		logger.info("updateDataList：{}",JSON.toJSONString(updateDataList));
 

@@ -5,14 +5,61 @@ public class TransModificationConsole {
     private String car_no;
     private String rent_time;
     private String revert_time;
-    private String day_unit_price;      //平日价
-    private String weekend_price;		//周末价
-    private String holiday_price;       //节假日价
+
+    private String day_unit_price;                  //平日价
+    private String weekend_price;		            //周末价
+    private String holiday_price;                   //节假日价
+    private String use_special_price;				//是否使用特供价		1:用 0：不用
+    private String ordinary_days_special_price;		//平日特供价格
+    private String weekend_special_price;			//周末特供价
+    private String holiday_special_price;			//节日特供价格
+    private String spring_festival_special_price;	//春节特供价格
+
 //    private String holiday_average;
     private String rent_amt;
     private String operator_time;       //操作时间
 //    private String create_time;
 
+
+    public String getUse_special_price() {
+        return use_special_price;
+    }
+
+    public void setUse_special_price(String use_special_price) {
+        this.use_special_price = use_special_price;
+    }
+
+    public String getOrdinary_days_special_price() {
+        return ordinary_days_special_price;
+    }
+
+    public void setOrdinary_days_special_price(String ordinary_days_special_price) {
+        this.ordinary_days_special_price = ordinary_days_special_price;
+    }
+
+    public String getWeekend_special_price() {
+        return weekend_special_price;
+    }
+
+    public void setWeekend_special_price(String weekend_special_price) {
+        this.weekend_special_price = weekend_special_price;
+    }
+
+    public String getHoliday_special_price() {
+        return holiday_special_price;
+    }
+
+    public void setHoliday_special_price(String holiday_special_price) {
+        this.holiday_special_price = holiday_special_price;
+    }
+
+    public String getSpring_festival_special_price() {
+        return spring_festival_special_price;
+    }
+
+    public void setSpring_festival_special_price(String spring_festival_special_price) {
+        this.spring_festival_special_price = spring_festival_special_price;
+    }
 
     public String getWeekend_price() {
         return weekend_price;

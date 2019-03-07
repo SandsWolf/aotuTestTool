@@ -10,5 +10,9 @@
 		SELECT real_start_date,real_end_date FROM `holiday_setting` order by real_start_date
 	</select>
 
+	<select id="selectSpringHolidaySettingList" resultType="java.util.HashMap">
+		SELECT real_start_date,real_end_date FROM `holiday_setting` WHERE `type` = 1 ORDER BY real_start_date
+	</select>
+
 	
 </mapper>

@@ -4,6 +4,9 @@ public class RentAmtData {
 	private String day_price;		//平时日均价
 	private String weekend_price;	//周末日均价
 	private String holiday_price;	//节假日均价
+	private String spring_price;	//春节日均价
+	private String use_special_price_flag;	//是否使用特供价  1:使用  0：不用
+
 	private String rent_time;		//订单开始时间
 	private String revert_time;		//订单结束时间
 
@@ -14,6 +17,22 @@ public class RentAmtData {
 	private Long operatorTime;		//修改订单用：操作时间：时间戳格式
 	private Integer type;			//修改订单用：数据类型：1.trans_modification_application表数据  2.trans_modification_console表数据
 	private String id;				//修改订单用：对应表中的id号
+
+	public String getUse_special_price_flag() {
+		return use_special_price_flag;
+	}
+
+	public void setUse_special_price_flag(String use_special_price_flag) {
+		this.use_special_price_flag = use_special_price_flag;
+	}
+
+	public String getSpring_price() {
+		return spring_price;
+	}
+
+	public void setSpring_price(String spring_price) {
+		this.spring_price = spring_price;
+	}
 
 	public String getId() {
 		return id;

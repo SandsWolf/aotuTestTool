@@ -3,21 +3,68 @@ package com.autoyol.entity;
 public class TransModificationApplication {
 	private String id;
 	private String order_no;
-	private String rent_time;			//订单开始时间；如：20180329151500
-	private String revert_time;			//订单结束时间；如：20180331151500
-	private String day_unit_price;		//修改订单时，车辆平日价
-	private String weekend_price;		//修改订单时，车辆周末价
-	private String holiday_price;		//修改订单时，车辆节假日价
-	private String rent_amt;			//修改订单时，订单租金
-	private String is_original;			//是否原始订单	1.是  2.不是
-	private String car_no;
-	private String create_time;			//数据请求时间；如：2018-03-29 11:07:08
-	private String confirm_flag; 		//拒绝类型  0:未处理，1:同意，2:自动拒绝，3:主动拒绝
-	private String supamt_flag;			//该请求状态  0无效 1有效
-	private String delay_request_flag;	//是否为延时申请
-	private String holiday_average;		//日均价
-	private String operator_time;		//操作时间
+	private String rent_time;						//订单开始时间；如：20180329151500
+	private String revert_time;						//订单结束时间；如：20180331151500
 
+	private String day_unit_price;					//修改订单时，车辆平日价
+	private String weekend_price;					//修改订单时，车辆周末价
+	private String holiday_price;					//修改订单时，车辆节假日价
+	private String use_special_price;				//是否使用特供价		1:用 0：不用
+	private String ordinary_days_special_price;		//平日特供价格
+	private String weekend_special_price;			//周末特供价
+	private String holiday_special_price;			//节日特供价格
+	private String spring_festival_special_price;	//春节特供价格
+
+	private String rent_amt;						//修改订单时，订单租金
+	private String is_original;						//是否原始订单	1.是  2.不是
+	private String car_no;
+	private String create_time;						//数据请求时间；如：2018-03-29 11:07:08
+	private String confirm_flag; 					//拒绝类型  0:未处理，1:同意，2:自动拒绝，3:主动拒绝
+	private String supamt_flag;						//该请求状态  0无效 1有效
+	private String delay_request_flag;				//是否为延时申请
+	private String holiday_average;					//日均价
+	private String operator_time;					//操作时间
+
+
+	public String getUse_special_price() {
+		return use_special_price;
+	}
+
+	public void setUse_special_price(String use_special_price) {
+		this.use_special_price = use_special_price;
+	}
+
+	public String getOrdinary_days_special_price() {
+		return ordinary_days_special_price;
+	}
+
+	public void setOrdinary_days_special_price(String ordinary_days_special_price) {
+		this.ordinary_days_special_price = ordinary_days_special_price;
+	}
+
+	public String getWeekend_special_price() {
+		return weekend_special_price;
+	}
+
+	public void setWeekend_special_price(String weekend_special_price) {
+		this.weekend_special_price = weekend_special_price;
+	}
+
+	public String getHoliday_special_price() {
+		return holiday_special_price;
+	}
+
+	public void setHoliday_special_price(String holiday_special_price) {
+		this.holiday_special_price = holiday_special_price;
+	}
+
+	public String getSpring_festival_special_price() {
+		return spring_festival_special_price;
+	}
+
+	public void setSpring_festival_special_price(String spring_festival_special_price) {
+		this.spring_festival_special_price = spring_festival_special_price;
+	}
 
 	public String getWeekend_price() {
 		return weekend_price;
