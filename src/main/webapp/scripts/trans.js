@@ -324,11 +324,18 @@ function checkRentAmt(event){
                             'car平日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carDayPrice + '</span>\n' +
                             '<br>\n';
 
-                        if (rentAmtType == "1") {
+                        if (rentAmtType == "0") {
+                            li = li + 'car节日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
+                                '<br>\n';
+                        } else if (rentAmtType == "1") {
                             li = li + 'car周末价：<span class="sign_span" style="color:red;">' + updateDataList[i].carWeekendPrice + '</span>\n' +
+                                '<br>\n' +
+                                'car节日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
                                 '<br>\n';
                         } else if (rentAmtType == "2") {
                             li = li + 'car周末价：<span class="sign_span" style="color:red;">' + updateDataList[i].carWeekendPrice + '</span>\n' +
+                                '<br>\n' +
+                                'car节日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
                                 '<br>\n';
                             if (updateDataList[i].useSpecialPriceFlag == "1") {
                                 li = li + 'car春节价：<span class="sign_span" style="color:red;">' + updateDataList[i].carSpringPrice + '</span>\n' +
@@ -336,18 +343,23 @@ function checkRentAmt(event){
                             }
                         }
 
-                        li = li + 'car节假日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
-                            '<br>\n' +
-                            '总小时数：<span class="sign_span" style="color:red;">' + updateDataList[i].totalH + '</span>小时\n' +
+                        li = li + '总小时数：<span class="sign_span" style="color:red;">' + updateDataList[i].totalH + '</span>小时\n' +
                             '<br>\n' +
                             '平日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalDayRentDate + '</span>小时\n' +
                             '<br>\n';
 
-                        if (rentAmtType == "1") {
+                        if (rentAmtType == "0") {
+                            li = li + '节日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
+                                '<br>\n';
+                        } else if (rentAmtType == "1") {
                             li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalWeekendRentDate + '</span>小时\n' +
+                                '<br>\n' +
+                                '节日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
                                 '<br>\n';
                         } else if (rentAmtType == "2") {
                             li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalWeekendRentDate + '</span>小时\n' +
+                                '<br>\n' +
+                                '节日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
                                 '<br>\n';
                             if (updateDataList[i].useSpecialPriceFlag == "1") {
                                 li = li + '春节价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalSpringRentDate + '</span>小时\n' +
@@ -355,9 +367,7 @@ function checkRentAmt(event){
                             }
                         }
 
-                        li = li + '节假日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
-                            '<br>\n' +
-                            '租期：<span class="sign_span" style="color:red;">' + updateDataList[i].rentDate + '</span>天\n' +
+                        li = li + '租期：<span class="sign_span" style="color:red;">' + updateDataList[i].rentDate + '</span>天\n' +
                             '<br>\n' +
                             '<br>\n' +
                             '订单日均价：<span class="sign_span" style="color:red;">' + updateDataList[i].avgDayPrice + '</span>元\n' +
@@ -388,11 +398,18 @@ function checkRentAmt(event){
                                 'car平日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carDayPrice + '</span>\n' +
                                 '<br>\n';
 
-                            if (rentAmtType == "1") {
+                            if (rentAmtType == "0") {
+                                li = li + 'car节日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
+                                    '<br>\n';
+                            } else if (rentAmtType == "1") {
                                 li = li + 'car周末价：<span class="sign_span" style="color:red;">' + updateDataList[i].carWeekendPrice + '</span>\n' +
+                                    '<br>\n' +
+                                    'car节日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
                                     '<br>\n';
                             } else if (rentAmtType == "2") {
                                 li = li + 'car周末价：<span class="sign_span" style="color:red;">' + updateDataList[i].carWeekendPrice + '</span>\n' +
+                                    '<br>\n' +
+                                    'car节日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
                                     '<br>\n';
                                 if (updateDataList[i].useSpecialPriceFlag == "1") {
                                     li = li + 'car春节价：<span class="sign_span" style="color:red;">' + updateDataList[i].carSpringPrice + '</span>\n' +
@@ -400,9 +417,7 @@ function checkRentAmt(event){
                                 }
                             }
 
-                            li = li + 'car节假日价：<span class="sign_span" style="color:red;">' + updateDataList[i].carHolidayPrice + '</span>\n' +
-                                '<br>\n' +
-                                '总租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalRentDate + '</span>天\n' +
+                            li = li + '总租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalRentDate + '</span>天\n' +
                                 '<br>\n' +
                                 '<b>总租金</b>（<span class="sign_span" style="color:red;">规则：各阶段租金之和</span>）为：<span class="sign_span" style="color:red;">' + updateDataList[i].rentAmt + '</span>元\n' +
                                 '<br>\n' +
@@ -430,11 +445,18 @@ function checkRentAmt(event){
                                 '平日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalDayRentDate + '</span>小时\n' +
                                 '<br>\n';
 
-                            if (rentAmtType == "1") {
+                            if (rentAmtType == "0") {
+                                li = li + '节日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
+                                    '<br>\n';
+                            } else if (rentAmtType == "1") {
                                 li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalWeekendRentDate + '</span>小时\n' +
+                                    '<br>\n' +
+                                    '节日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
                                     '<br>\n';
                             } else if (rentAmtType == "2") {
                                 li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalWeekendRentDate + '</span>小时\n' +
+                                    '<br>\n' +
+                                    '节日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
                                     '<br>\n';
                                 if (updateDataList[i].useSpecialPriceFlag == "1") {
                                     li = li + '春节价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalSpringRentDate + '</span>小时\n' +
@@ -442,9 +464,7 @@ function checkRentAmt(event){
                                 }
                             }
 
-                            li = li + '节假日价所占租期：<span class="sign_span" style="color:red;">' + updateDataList[i].totalHolidayRentDate + '</span>小时\n' +
-                                '<br>\n' +
-                                '租期：<span class="sign_span" style="color:red;">' + updateDataList[i].rentDate + '</span>天\n' +
+                            li = li + '租期：<span class="sign_span" style="color:red;">' + updateDataList[i].rentDate + '</span>天\n' +
                                 '<br>\n' +
                                 '<br>\n' +
                                 '订单日均价：<span class="sign_span" style="color:red;">' + updateDataList[i].avgDayPrice + '</span>元\n' +
@@ -939,11 +959,18 @@ function updateTrans(event){
                             'car平日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carDayPrice + '</span>\n' +
                             '<br>\n';
 
-                        if (rentAmtType == "1") {
+                        if (rentAmtType == "0") {
+                            li = li + 'car节日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
+                                '<br>\n';
+                        } else if (rentAmtType == "1") {
                             li = li + 'car周末价：<span class="sign_span" style="color:red;">' + resultMsg[i].carWeekendPrice + '</span>\n' +
+                                '<br>\n' +
+                                'car节日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
                                 '<br>\n';
                         } else if (rentAmtType == "2") {
                             li = li + 'car周末价：<span class="sign_span" style="color:red;">' + resultMsg[i].carWeekendPrice + '</span>\n' +
+                                '<br>\n' +
+                                'car节日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
                                 '<br>\n';
                             if (resultMsg[i].useSpecialPriceFlag == "1") {
                                 li = li + 'car春节价：<span class="sign_span" style="color:red;">' + resultMsg[i].carSpringPrice + '</span>\n' +
@@ -951,18 +978,23 @@ function updateTrans(event){
                             }
                         }
 
-                        li = li + 'car节假日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
-                            '<br>\n' +
-                            '总小时数：<span class="sign_span" style="color:red;">' + resultMsg[i].totalH + '</span>小时\n' +
+                        li = li + '总小时数：<span class="sign_span" style="color:red;">' + resultMsg[i].totalH + '</span>小时\n' +
                             '<br>\n' +
                             '平日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalDayRentDate + '</span>小时\n' +
                             '<br>\n';
 
-                        if (rentAmtType == "1") {
+                        if (rentAmtType == "0") {
+                            li = li + '节日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
+                                '<br>\n';
+                        } else if (rentAmtType == "1") {
                             li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalWeekendRentDate + '</span>小时\n' +
+                                '<br>\n' +
+                                '节日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
                                 '<br>\n';
                         } else if (rentAmtType == "2") {
                             li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalWeekendRentDate + '</span>小时\n' +
+                                '<br>\n' +
+                                '节日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
                                 '<br>\n';
                             if (resultMsg[i].useSpecialPriceFlag == "1") {
                                 li = li + '春节价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalSpringRentDate + '</span>小时\n' +
@@ -970,9 +1002,7 @@ function updateTrans(event){
                             }
                         }
 
-                        li = li + '节假日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
-                            '<br>\n' +
-                            '租期：<span class="sign_span" style="color:red;">' + resultMsg[i].rentDate + '</span>天\n' +
+                        li = li + '租期：<span class="sign_span" style="color:red;">' + resultMsg[i].rentDate + '</span>天\n' +
                             '<br>\n' +
                             '<br>\n' +
                             '订单日均价：<span class="sign_span" style="color:red;">' + resultMsg[i].avgDayPrice + '</span>元\n' +
@@ -997,11 +1027,18 @@ function updateTrans(event){
                             'car平日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carDayPrice + '</span>\n' +
                             '<br>\n';
 
-                        if (rentAmtType == "1") {
+                        if (rentAmtType == "0") {
+                            li = li + 'car节日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
+                                '<br>\n';
+                        } else if (rentAmtType == "1") {
                             li = li + 'car周末价：<span class="sign_span" style="color:red;">' + resultMsg[i].carWeekendPrice + '</span>\n' +
+                                '<br>\n' +
+                                'car节日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
                                 '<br>\n';
                         } else if (rentAmtType == "2") {
                             li = li + 'car周末价：<span class="sign_span" style="color:red;">' + resultMsg[i].carWeekendPrice + '</span>\n' +
+                                '<br>\n' +
+                                'car节日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
                                 '<br>\n';
                             if (resultMsg[i].useSpecialPriceFlag == "1") {
                                 li = li + 'car春节价：<span class="sign_span" style="color:red;">' + resultMsg[i].carSpringPrice + '</span>\n' +
@@ -1009,9 +1046,7 @@ function updateTrans(event){
                             }
                         }
 
-                        li = li + 'car节假日价：<span class="sign_span" style="color:red;">' + resultMsg[i].carHolidayPrice + '</span>\n' +
-                            '<br>\n' +
-                            '总租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalRentDate + '</span>天\n' +
+                        li = li + '总租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalRentDate + '</span>天\n' +
                             '<br>\n' +
                             '<b>总租金</b>（<span class="sign_span" style="color:red;">规则：各阶段租金之和</span>）为：<span class="sign_span" style="color:red;">' + resultMsg[i].rentAmt + '</span>元\n' +
                             '<br>\n' +
@@ -1028,11 +1063,18 @@ function updateTrans(event){
                             '平日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalDayRentDate + '</span>小时\n' +
                             '<br>\n';
 
-                        if (rentAmtType == "1") {
+                        if (rentAmtType == "0") {
+                            li = li + '节日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
+                                '<br>\n';
+                        } else if (rentAmtType == "1") {
                             li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalWeekendRentDate + '</span>小时\n' +
+                                '<br>\n' +
+                                '节日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
                                 '<br>\n';
                         } else if (rentAmtType == "2") {
                             li = li + '周末价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalWeekendRentDate + '</span>小时\n' +
+                                '<br>\n' +
+                                '节日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
                                 '<br>\n';
                             if (resultMsg[i].useSpecialPriceFlag == "1") {
                                 li = li + '春节价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalSpringRentDate + '</span>小时\n' +
@@ -1040,9 +1082,7 @@ function updateTrans(event){
                             }
                         }
 
-                        li = li + '节假日价所占租期：<span class="sign_span" style="color:red;">' + resultMsg[i].totalHolidayRentDate + '</span>小时\n' +
-                            '<br>\n' +
-                            '租期：<span class="sign_span" style="color:red;">' + resultMsg[i].rentDate + '</span>天\n' +
+                        li = li + '租期：<span class="sign_span" style="color:red;">' + resultMsg[i].rentDate + '</span>天\n' +
                             '<br>\n' +
                             '<br>\n' +
                             '订单日均价：<span class="sign_span" style="color:red;">' + resultMsg[i].avgDayPrice + '</span>元\n' +

@@ -14,7 +14,7 @@ public interface TransService {
 	public Map<String,String> getRentAmtWithWeekend(List<String> holidayList, double dayPrice,double weekendPrice, double holiydaPrice, String startTime, String endTime);
 	public Map<String,String> getRentAmtWithSpecialPrice(List<String> springHolidayList, List<String> holidayList, double dayPrice, double weekendPrice, double holiydaPrice,double springPrice, String startTime, String endTime);
 	public Map<String,String> checkRentAmt(List<String> holidayList, List<TransLog> transLoglist);
-    public List<UpdateData> updateTrans(List<String> springHolidayList, List<String> holidayList, List<RentAmtData> rentAmtDataList , int rentAmtType);
+    public List<UpdateData> updateTrans(List<String> springHolidayList, List<String> holidayList, List<RentAmtData> rentAmtDataList , int rentAmtType) throws Exception;
 	public List<String> modifyRentTime(String rentTime, String revertTime, int type);
 	public Map<String,String> getDistanceFromCar(String ALon, String ALat, String BLon, String BLat);
 	public Map<String,String> getDistance(String aLon, String aLat, String bLon, String bLat);

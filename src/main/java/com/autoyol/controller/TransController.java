@@ -603,7 +603,12 @@ public class TransController {
 		}
 		logger.info("rentAmtDataList:{}",JSON.toJSON(rentAmtDataList));
 
-		List<UpdateData> updateDataList = transService.updateTrans(springHolidayList, holidayList,rentAmtDataList,rentAmtType);
+        List<UpdateData> updateDataList = null;
+		try {
+            updateDataList = transService.updateTrans(springHolidayList, holidayList,rentAmtDataList,rentAmtType);
+        } catch (Exception e) {
+		    logger.info("exception:{}",e);
+        }
 		logger.info("updateDataList:{}",JSON.toJSON(updateDataList));
 
 		result.setStatus(0);
@@ -737,7 +742,11 @@ public class TransController {
 			rentAmtDataList = Arrays.asList(rentAmtDatas);
 		}
 
-		updateDataList = transService.updateTrans(springHolidayList,holidayList,rentAmtDataList,Integer.parseInt(rentAmtType));
+        try {
+            updateDataList = transService.updateTrans(springHolidayList,holidayList,rentAmtDataList,Integer.parseInt(rentAmtType));
+        } catch (Exception e) {
+            logger.info("exception:{}",e);
+        }
 
 		logger.info("updateDataList：{}",JSON.toJSONString(updateDataList));
 

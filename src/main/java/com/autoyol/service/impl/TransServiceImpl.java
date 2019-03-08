@@ -983,7 +983,7 @@ public class TransServiceImpl implements TransService{
      * @param rentAmtType           0:不带周末，不带春节（2段）  1:带周末，不带春节（3段）  2:使用特供价（4段）
      * @return
      */
-	public List<UpdateData> updateTrans(List<String> springHolidayList, List<String> holidayList, List<RentAmtData> rentAmtDataList , int rentAmtType) {
+	public List<UpdateData> updateTrans(List<String> springHolidayList, List<String> holidayList, List<RentAmtData> rentAmtDataList , int rentAmtType) throws Exception {
 //		List<RentAmtData> rentAmtDataList = new ArrayList<RentAmtData>();       //数据源List
 		List<UpdateData> updateDataList = new ArrayList<UpdateData>();          //修改订单计算后数据List
 		List<RentAmtData> stageList = new ArrayList<RentAmtData>();     //阶段List：记录每个阶段数据
