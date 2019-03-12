@@ -16,6 +16,15 @@ public class MileOilCostDataInfo {
     private String totalAmt;
     private String ownerGetMileage;         //trans_ext表中车主取车里程数
     private String ownerReturnMileage;      //trans_ext表中车主还车里程数
+    private String oilScaleDenominator;     //trans_ext表中油表刻度分母
+
+    public String getOilScaleDenominator() {
+        return oilScaleDenominator;
+    }
+
+    public void setOilScaleDenominator(String oilScaleDenominator) {
+        this.oilScaleDenominator = oilScaleDenominator;
+    }
 
     public String getOwnerGetMileage() {
         return ownerGetMileage;

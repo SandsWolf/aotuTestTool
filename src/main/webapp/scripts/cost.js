@@ -712,6 +712,7 @@ function mileOilCost(event){
                 }
                 li = li + "</span><br>-->能源价格：<span class='sign_span' style='color:red;'>" + mileOilCostDataInfo.molecule + " 元/升</span>";
                 li = li + "</span><br>-->油箱容积：<span class='sign_span' style='color:red;'>" + mileOilCostDataInfo.oilVolume + " 升</span>";
+                li = li + "</span><br>-->油表刻度分母：<span class='sign_span' style='color:red;'>" + mileOilCostDataInfo.oilScaleDenominator + " 格</span>";
 
 
                 li = li + "<hr style='height:1px;border:none;border-top:1px dashed #0066CC;' />";
