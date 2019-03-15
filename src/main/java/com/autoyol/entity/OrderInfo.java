@@ -23,7 +23,7 @@ public class OrderInfo {
     private Integer return_car_mileage_renter;		//租客还车时里程数
     private Integer get_car_oil_scale_renter;		//租客取车时油量刻度
     private Integer return_car_oil_scale_renter;	//租客还车时油量刻度
-    private Integer oil_scale_denominator;          //油表刻度分母
+    private double oil_scale_denominator;          //油表刻度分母
 
     private Integer day_miles_owner;			//车主日限里程数：0表示不限
     private Integer day_miles_renter;			//租客日限里程数：0表示不限
@@ -47,7 +47,7 @@ public class OrderInfo {
     private Integer oil_service_cost_owner;		//车主端加油服务费
     private Integer oil_service_cost_renter;	//租客端加油服务费
 
-    public Integer getOil_scale_denominator() {
+    public Double getOil_scale_denominator() {
         return oil_scale_denominator;
     }
 

@@ -708,7 +708,8 @@ public class CostServiceImpl implements CostService {
         Integer fuelSize = orderInfo.getOil_volume();												//油箱容量
 //        Double gasPrice = orderInfo.getMolecule() / 10d;											//油价
         Double gasPrice = (orderInfo.getMolecule() * 1d) / orderInfo.getDenominator();		        //油价
-        Integer oilScaleDenominator = orderInfo.getOil_scale_denominator();                         //油表刻度分母
+//        Double oilScaleDenominator = orderInfo.getOil_scale_denominator();                         //油表刻度分母
+        Double oilScaleDenominator =  16d;
         Integer serviceCost = orderInfo.getServiceCost();											//油量服务费
         Integer totalAmt = orderInfo.getTotal_amt();												//车辆押金
         String renterToken = orderInfo.getToken();													//租客token
@@ -1164,7 +1165,7 @@ public class CostServiceImpl implements CostService {
         Integer renterGetMileage = (Integer) paramMap.get("renterGetMileage");              //租客取车时里程数
         Integer renterReturnMileage = (Integer) paramMap.get("renterReturnMileage");        //租客还车时里程数
 
-        Integer oilScaleDenominator = (Integer) paramMap.get("oilScaleDenominator");        //油表刻度分母
+        Double oilScaleDenominator = (Double) paramMap.get("oilScaleDenominator");        //油表刻度分母
         Integer fuelSize = (Integer) paramMap.get("fuelSize");                          //邮箱容积
         Double gasPrice = (Double) paramMap.get("gasPrice");                            //油价
 
@@ -1266,7 +1267,7 @@ public class CostServiceImpl implements CostService {
         logger.info("========>renterOilCostParam：{}",JSON.toJSONString(paramMap));
         Integer getGraduation = (Integer) paramMap.get("renterGetGraduation");          //租客取车时邮箱刻度
         Integer returngraduation = (Integer) paramMap.get("renterReturnGraduation");    //租客还车时邮箱刻度
-        Integer oilScaleDenominator = (Integer) paramMap.get("oilScaleDenominator");    //油表刻度分母
+        Double oilScaleDenominator = (Double) paramMap.get("oilScaleDenominator");    //油表刻度分母
         Integer fuelSize = (Integer) paramMap.get("fuelSize");                          //邮箱容积
         Double gasPrice = (Double) paramMap.get("gasPrice");                            //油价
 
