@@ -16,6 +16,7 @@ import com.autoyol.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.awt.geom.Point2D;
@@ -356,6 +357,7 @@ public class CostServiceImpl implements CostService {
         Map<String,String> resultMap = new HashMap<String,String>();
 
         int carDepositAmt = 300;    //内部员工，车辆押金固定300元
+        int newCarDepositAmt = 300; //内部员工，车辆押金固定300元
         resultMap.put("InternalStaff","" + member.getInternal_staff());         //内部员工标识
         if (member.getInternal_staff() == 0) {      //非内部员工
             Integer alreadyReliefPercentage = getRelief(serverIP,mobile);    //会员减免比例
@@ -381,7 +383,7 @@ public class CostServiceImpl implements CostService {
             int depositValue = depositConfig.getDeposit_value();    //原始车辆押金
             carDepositAmt = ToolUtil.ceil(depositValue * percent);     //不知道取整规则，暂时向上取整
 
-            Float carParamRatio = 0.0f;
+            Float carParamRatio = 0.0f;     // 车辆品牌系数
             Car car = carMapper.selectCarInfo(carNo);
             if (car != null && car.getBrand() != null && car.getType() != null) {
                 String ratio = systemConfigMapper.selectCarParamRatio(car.getBrand(),car.getType());
@@ -390,17 +392,51 @@ public class CostServiceImpl implements CostService {
                 }
             }
             carParamRatio = carParamRatio == null? (1 + 0.0f) : (1 + carParamRatio);
+
+            int year = 1;       // 年份
+            if (!StringUtils.isEmpty(car.getLicenseDay())) {
+                year = ToolUtil.ceil(Double.parseDouble(car.getLicenseDay()));
+            }
+
+            Float newCarCoefficient = 1.0f;     //新车辆押金系数（年份系数）
+            if (year <= 2) {
+                newCarCoefficient = 1.3f;
+            }
+
+            Float newCarParamRatio = 1.3f;
+            if (carParamRatio == 1.0f && newCarCoefficient == 1.0f) {
+                newCarParamRatio = 1.0f;
+            }
+
+            int newCarDepositAmtflag = 0;  //新车辆押金 计算规则flag
+            if (Integer.parseInt(car.getSurplus_price()) > 1500000) {
+                newCarDepositAmt = depositValue;
+                newCarDepositAmtflag = 1;
+            } else {
+                newCarDepositAmt = ToolUtil.ceil(carDepositAmt * newCarParamRatio);
+                newCarDepositAmt = newCarDepositAmt<0 ? 0 : newCarDepositAmt;
+            }
+
             carDepositAmt = ToolUtil.ceil(carDepositAmt * carParamRatio);
             carDepositAmt = carDepositAmt<0 ? 0 : carDepositAmt;
+
+
+
             logger.info("车辆押金：{}",carDepositAmt);
 
-            resultMap.put("cityCode","" + depositConfig.getCity());                 //车辆所在cityCode
-            resultMap.put("surplusPrice","" + depositConfig.getSurplus_price());    //车辆残值
-            resultMap.put("depositValue","" + depositValue);                        //原始车辆押金
-            resultMap.put("alreadyReliefPercentage","" + alreadyReliefPercentage);  //会员减免比例
-            resultMap.put("carParamRatio","" + carParamRatio);                      //车辆品牌系数
+            resultMap.put("cityCode", "" + depositConfig.getCity());                 //车辆所在cityCode
+            resultMap.put("surplusPrice", "" + depositConfig.getSurplus_price());    //车辆残值
+            resultMap.put("depositValue", "" + depositValue);                        //原始车辆押金
+            resultMap.put("alreadyReliefPercentage", "" + alreadyReliefPercentage);  //会员减免比例
+            resultMap.put("carParamRatio", "" + carParamRatio);                      //车辆品牌系数
+
+            resultMap.put("newCarCoefficient", "" + newCarCoefficient);              //新车辆押金系数（年份系数）
+            resultMap.put("year", "" + year);                                        //year
+            resultMap.put("newCarDepositAmtflag", "" + newCarDepositAmtflag);        //新车辆押金 计算规则flag
+            resultMap.put("newCarParamRatio", "" + newCarParamRatio);                //新车辆押金算法_总系数
         }
-        resultMap.put("CarDepositAmt","" + carDepositAmt);                      //车辆押金
+        resultMap.put("CarDepositAmt","" + carDepositAmt);                       //车辆押金
+        resultMap.put("newCarDepositAmt", "" + newCarDepositAmt);                //车辆押金（新算法）
 
         result.setStatus(0);
         result.setMsg("success");
@@ -708,8 +744,7 @@ public class CostServiceImpl implements CostService {
         Integer fuelSize = orderInfo.getOil_volume();												//油箱容量
 //        Double gasPrice = orderInfo.getMolecule() / 10d;											//油价
         Double gasPrice = (orderInfo.getMolecule() * 1d) / orderInfo.getDenominator();		        //油价
-//        Double oilScaleDenominator = orderInfo.getOil_scale_denominator();                         //油表刻度分母
-        Double oilScaleDenominator =  16d;
+        Double oilScaleDenominator = orderInfo.getOil_scale_denominator();                         //油表刻度分母
         Integer serviceCost = orderInfo.getServiceCost();											//油量服务费
         Integer totalAmt = orderInfo.getTotal_amt();												//车辆押金
         String renterToken = orderInfo.getToken();													//租客token
@@ -1173,7 +1208,7 @@ public class CostServiceImpl implements CostService {
         计算车主给平台加油服务费 — 车主端增加加油服务费收费项
          */
         int platformServiceCost = 0;        //平台加油服务费
-        if ((renterGetGraduation > ownerGetGraduation) && (ownerGetGraduation <= 4)) {
+        if ((renterGetGraduation > ownerGetGraduation) && ((ownerGetGraduation / oilScaleDenominator) <= 0.25d)) {
             platformServiceCost = -25;
         }
 
@@ -1196,11 +1231,11 @@ public class CostServiceImpl implements CostService {
             ownerOilServiceCost = ToolUtil.floor(ownerOilCost / 4d);
         }
 
-//        if (m == 1) {
-//            ownerOilCost = 0;
-//            ownerOilCost = 0;
-//            msg += "由于邮箱刻度差=1，所以不计算油费。";
-//        }
+        if (m == -1) {
+            ownerOilCost = 0;
+            ownerOilServiceCost = 0;
+            msg += "由于油箱刻度差=1，所以不计算油费。";
+        }
 
 //        if (settle == 0) {
 //            ownerOilServiceCost = 0;
@@ -1265,10 +1300,10 @@ public class CostServiceImpl implements CostService {
      */
     public Map<String,String> renterOilCost(Map<String,Object> paramMap){
         logger.info("========>renterOilCostParam：{}",JSON.toJSONString(paramMap));
-        Integer getGraduation = (Integer) paramMap.get("renterGetGraduation");          //租客取车时邮箱刻度
-        Integer returngraduation = (Integer) paramMap.get("renterReturnGraduation");    //租客还车时邮箱刻度
-        Double oilScaleDenominator = (Double) paramMap.get("oilScaleDenominator");    //油表刻度分母
-        Integer fuelSize = (Integer) paramMap.get("fuelSize");                          //邮箱容积
+        Integer getGraduation = (Integer) paramMap.get("renterGetGraduation");          //租客取车时油箱刻度
+        Integer returngraduation = (Integer) paramMap.get("renterReturnGraduation");    //租客还车时油箱刻度
+        Double oilScaleDenominator = (Double) paramMap.get("oilScaleDenominator");      //油表刻度分母
+        Integer fuelSize = (Integer) paramMap.get("fuelSize");                          //油箱容积
         Double gasPrice = (Double) paramMap.get("gasPrice");                            //油价
 
         int m = getGraduation - returngraduation;
@@ -1285,11 +1320,11 @@ public class CostServiceImpl implements CostService {
             renterOilServiceCost = ToolUtil.floor(renterOilCost / 4d);
         }
 
-//        if (m == 1) {
-//            renterOilCost = 0;
-//            renterOilCost = 0;
-//            msg += "由于邮箱刻度差=1，所以不计算油费。";
-//        }
+        if (m == -1) {
+            renterOilCost = 0;
+            renterOilServiceCost = 0;
+            msg += "由于油箱刻度差=1，所以不计算油费。";
+        }
 
 //        if (settle == 0) {
 //            renterOilServiceCost = 0;

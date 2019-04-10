@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -125,14 +126,76 @@ public class TestTrans {
     }
 
 
+    @Test
+    public void testGetReturnFee () {
+        String environment = "test1_autoFeeService";    // test1 取还车费用 系数库
+        SetDateSourceUtil.setDataSourceName(environment);
+        PathIP pathIP = ToolUtil.getIP(environment);
+
+        String cityCode = "310100";
+        String ruleDate = "20190320";
+
+        Map<String, String> paraMap = new HashMap<>();
+        paraMap.put("cityCode", cityCode);
+        paraMap.put("ruleDate", ruleDate);
+
+        String mapJson = transMapper.selectGetBackCarFeeConfig(paraMap);
+        Map<String, Object> map = (Map)JSON.parseObject(mapJson);
+        System.out.println("map:" + JSON.toJSONString(map));
+        Integer cityCodeRes = (Integer) map.get("cityCode");
+        Integer ruleDateRes = (Integer) map.get("ruleDate");
+        System.out.println("cityCodeRes:" + JSON.toJSONString(cityCodeRes));
+        System.out.println("ruleDateRes:" + JSON.toJSONString(ruleDateRes));
+
+        if (cityCodeRes == Integer.parseInt(cityCode) && ruleDateRes == Integer.parseInt(ruleDate)) {
+            // 【基础费】
+            Map<String, Object> carBaseFeeVo = (Map<String, Object>)map.get("carBaseFeeVo");
+            Map<String, Object> carBaseFeeRule = (Map<String, Object>)carBaseFeeVo.get("carBaseFeeRule");
+            BigDecimal orderFee = (BigDecimal) carBaseFeeRule.get("orderFee");          // 普通订单基础费
+            BigDecimal packageFee = (BigDecimal) carBaseFeeRule.get("packageFee");      // 套餐订单基础费
+            System.out.println("普通订单基础费:" + JSON.toJSONString(orderFee));
+            System.out.println("套餐订单基础费:" + JSON.toJSONString(packageFee));
+
+
+            // 【日期系数】
+            Map<String, Object> dateCoefficientVo = (Map<String, Object>)map.get("dateCoefficientVo");
+            BigDecimal defaultCoefficient = (BigDecimal) dateCoefficientVo.get("defaultCoefficient");          // 默认【日期系数】
+            System.out.println("默认【日期系数】:" + JSON.toJSONString(defaultCoefficient));
+
+            List<Object> dateCoefficientDetailVoList = (List<Object>)dateCoefficientVo.get("dateCoefficientDetailVoList");
+            System.out.println("dateCoefficientDetailVoList:" + JSON.toJSONString(dateCoefficientDetailVoList));
+            for (int i = 0; i <dateCoefficientDetailVoList.size() ; i++) {
+                Map<String, Object> dateCoefficientDetailVo = (Map<String, Object>)dateCoefficientDetailVoList.get(i);
+                Integer startDate = (Integer) dateCoefficientDetailVo.get("startDate");
+                Integer endDate = (Integer) dateCoefficientDetailVo.get("endDate");
+                BigDecimal coefficient = (BigDecimal) dateCoefficientDetailVo.get("coefficient");
+                System.out.println("startDate:" + JSON.toJSONString(startDate));
+                System.out.println("endDate:" + JSON.toJSONString(endDate));
+                System.out.println("coefficient:" + JSON.toJSONString(coefficient));
+                System.out.println("-----------");
+            }
+
+        } else {
+            System.out.println("------------> 数据有误，请检查");
+            System.out.println("------------> cityCodeRes：" + cityCodeRes);
+            System.out.println("------------> ruleDateRes：" + ruleDateRes);
+        }
+
+
+
+    }
+
+
+
+
     public static void main(String[] args) {
-        String a = "0";
-        String b = "100";
-        RentAmtData rentAmtData = new RentAmtData();
+        String a = "ruleContent\": \"{\"cityCode\":310100,\"ruleDate\":20190320,\"carBaseFeeVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"carBaseFeeRule\":{\"orderFee\":30.00,\"packageFee\":50.00}},\"dateCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"defaultCoefficient\":2.00,\"dateCoefficientDetailVoList\":[{\"detailName\":\"x\",\"startDate\":20190314,\"endDate\":20190419,\"coefficient\":1.50},{\"detailName\":\"x\",\"startDate\":20190420,\"endDate\":20190425,\"coefficient\":0.00}]},\"timePeriodCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"defaultCoefficient\":0.00,\"timePeriodDetailVoList\":[{\"detailName\":\"x\",\"startTimeperiod\":15,\"endTimeperiod\":100,\"coefficient\":2.00},{\"detailName\":\"x\",\"startTimeperiod\":415,\"endTimeperiod\":600,\"coefficient\":3.00},{\"detailName\":\"x\",\"startTimeperiod\":1015,\"endTimeperiod\":1245,\"coefficient\":0.40},{\"detailName\":\"x\",\"startTimeperiod\":1700,\"endTimeperiod\":2000,\"coefficient\":0.60}]},\"distanceCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"defaultCoefficient\":2.00,\"distanceDetailVoList\":[{\"detailName\":\"x\",\"distanceLeft\":0.00,\"distanceRight\":0.00,\"coefficient\":1.00},{\"detailName\":\"x\",\"distanceLeft\":0.00,\"distanceRight\":5.00,\"coefficient\":1.50},{\"detailName\":\"x\",\"distanceLeft\":5.00,\"distanceRight\":10000.00,\"coefficient\":3.00}]},\"carFeeCicrleVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"circleVersion\":1,\"defaultCoefficient\":2.00,\"carFeeCicrleRule\":[{\"id\":\"114\",\"detailName\":\"内圈\",\"cicrleContent\":\"xxxxx\",\"coefficient\":2.00,\"circleVersion\":1}]},\"carFeeChannelCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"carFeeChannelRules\":[{\"channelName\":\"default\",\"coefficient\":1.00},{\"channelName\":\"app\",\"coefficient\":1.00},{\"channelName\":\"ota\",\"coefficient\":0.00},{\"channelName\":\"scooter\",\"coefficient\":0.00}]}}";
 
-        rentAmtData.setDay_price("0".equals(a) ? b : a);
+//        Map<String, Object> map = (Map)JSON.parseObject(a);
+        System.out.println(JSON.toJSONString(a));
 
-        System.out.println(rentAmtData.getDay_price());
+
+        Double x = 6.8120d;
     }
 
 

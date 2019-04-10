@@ -820,7 +820,7 @@ public class TransController {
 	 * 订单状态流转
 	 * @param environment
 	 * @param orderNo
-	 * @param stepFlag	//1:取车  2:还车  3:双方评价
+	 * @param stepFlag	//1:用车中  2:待还车  3:确认还车  4:双方评价
 	 * @return
 	 */
 	@RequestMapping("/statusFlow")
@@ -847,7 +847,7 @@ public class TransController {
 		}
 
 		logger.info("开始订单状态流转");
-		int step = Integer.parseInt(stepFlag);	//1:取车  2:还车  3:双方评价
+		int step = Integer.parseInt(stepFlag);	//1:用车中  2:待还车  3:确认还车  4:双方评价
 
 		Integer status = trans.getStatus();
 		logger.info("status = {}",status);

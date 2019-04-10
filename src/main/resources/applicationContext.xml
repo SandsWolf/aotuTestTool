@@ -31,6 +31,7 @@
 			<entry value-ref="test9DB" key="test_9DB"></entry>
             <entry value-ref="onlineDB" key="on_lineDB"></entry>
 			<entry value-ref="onlineHolidayDB" key="on_lineHolidayDB"></entry>
+			<entry value-ref="test1AutoFeeServiceDB" key="test1_autoFeeServiceDB"></entry>
         </map>
     </property>
     <property name="defaultTargetDataSource" ref="cloudDB">
@@ -100,6 +101,13 @@
 	<property name="password" value="${onlineHoliday_pwd}"></property>
 	<property name="url" value="${onlineHoliday_url}"></property>
 	<property name="driverClassName" value="${onlineHoliday_driver}"></property>
+</bean>
+
+<bean id="test1AutoFeeServiceDB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test1_autoFeeService_username}"></property>
+	<property name="password" value="${test1_autoFeeService_pwd}"></property>
+	<property name="url" value="${test1_autoFeeService_url}"></property>
+	<property name="driverClassName" value="${test1_autoFeeService_driver}"></property>
 </bean>
 
 

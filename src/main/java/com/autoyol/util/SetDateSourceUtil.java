@@ -45,6 +45,8 @@ public class SetDateSourceUtil {
         	dataSource = "on_lineDB";
         } else if ("onlineHoliday".equals(dataSource)) {   //线上节日库
             dataSource = "on_lineHolidayDB";
+        } else if ("test1_autoFeeService".equals(dataSource)) {
+            dataSource = "test1_autoFeeServiceDB";
         }
         //((JdbcTemplate)SpringContextHolder.getBean("jdbcTemplate")).setDataSource((DataSource)SpringContextHolder.getBean(dataSource));  
         return dataSource;    

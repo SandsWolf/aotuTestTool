@@ -541,9 +541,17 @@ function carDepositAmt(event){
                     li = li + "</span><br>车辆cityCode：<span class='sign_span' style='color:red;'>" + resultMsg.cityCode + "</span>";
                     li = li + "</span><br>原始车辆押金：<span class='sign_span' style='color:red;'>" + resultMsg.depositValue + " 元</span>";
                     li = li + "</span><br>会员减免比例：<span class='sign_span' style='color:red;'>" + resultMsg.alreadyReliefPercentage + "%</span>";
-                    li = li + "</span><br>车辆品牌系数：<span class='sign_span' style='color:red;'>" + resultMsg.carParamRatio + "</span>";
+                    li = li + "</span><br>年份：<span class='sign_span' style='color:red;'>" + resultMsg.year + " 年</span>";
+                    li = li + "</span><br>---->年份系数：<span class='sign_span' style='color:red;'>" + resultMsg.newCarCoefficient + "</span>";
+                    li = li + "</span><br>---->车辆品牌系数：<span class='sign_span' style='color:red;'>" + resultMsg.carParamRatio + "</span>";
+                    li = li + "</span><br>-------->新算法_总系数：<span class='sign_span' style='color:red;'>" + resultMsg.newCarParamRatio + "</span>";
                     li = li + "</span><br>是否内部员工：<span class='sign_span' style='color:red;'>否</span><br>";
-                    li = li + "</span><br>车辆押金[<span class='sign_span' style='color:red;'>规则：【原始车辆押金 * （100% - 会员减免比例）】 * 车辆品牌系数</span>]：<span class='sign_span' style='color:red;'>" + resultMsg.CarDepositAmt + " 元</span><br>";
+                    li = li + "</span><br>车辆押金 [<span class='sign_span' style='color:red;'>规则：【原始车辆押金 * （100% - 会员减免比例）】 * （1 + 车辆品牌系数）</span>]：<span class='sign_span' style='color:red;'>" + resultMsg.CarDepositAmt + " 元</span>";
+                    if (resultMsg.newCarDepositAmtflag == 1) {
+                        li = li + "</span><br>新_车辆押金 [<span class='sign_span' style='color:red;'>规则：车辆押金 = 车辆押金基数（车辆残值 > 150万时）</span>]：<span class='sign_span' style='color:red;'>" + resultMsg.newCarDepositAmt + " 元</span><br>";
+                    }  else {
+                        li = li + "</span><br>新_车辆押金 [<span class='sign_span' style='color:red;'>规则：【原始车辆押金 * （100% - 会员减免比例）】 * 总系数）</span>]：<span class='sign_span' style='color:red;'>" + resultMsg.newCarDepositAmt + " 元</span><br>";
+                    }
                 }
                 li = li + "</b></span><br><br><br>";
                 var $li = $(li);

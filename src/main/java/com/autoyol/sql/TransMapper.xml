@@ -202,6 +202,11 @@
 	</insert>
 
 
+	<select id="selectGetBackCarFeeConfig" parameterType="Map" resultType="string">
+    	SELECT rule_content FROM `fetchback_car_fee_config_prepare_process` WHERE city_code=#{cityCode} AND rule_date=#{ruleDate}
+    </select>
+
+
 
 
 

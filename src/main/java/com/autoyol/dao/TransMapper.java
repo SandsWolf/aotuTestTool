@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import com.autoyol.entity.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TransMapper {
 	public Trans selectTransByorderNo(String order_no);
@@ -22,6 +23,7 @@ public interface TransMapper {
 	public void deleteTransIllegalSettleUntreated(String orderNo);
 	public void deleteTransIllegalSettleFlag(String orderNo);
 	public void insertTransIllegalSettleFlag(String orderNo);
+	public String selectGetBackCarFeeConfig (Map<String, String> paraMap);
 
 
 

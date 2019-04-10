@@ -11,6 +11,7 @@
           city,
           brand,
           `type`,
+          TIMESTAMPDIFF(DAY,DATE_FORMAT(license_day,'%Y%m%d'),DATE_FORMAT(NOW(),'%Y%m%d'))/365  AS licenseDay,
           get_car_lon,
           get_car_lat,
           is_local

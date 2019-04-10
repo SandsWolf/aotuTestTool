@@ -8,6 +8,7 @@ public class Car {
     private String city;                    //城市编码
     private String brand;                   //品牌ID
     private String type;                    //车型ID
+    private String licenseDay;              //年份：如 6.8000年
 
     private Integer guid_price_begin;       //平台保障费开始范围费用：非car表
     private Integer guid_price_end;         //平台保障费结束范围费用：非car表
@@ -15,6 +16,14 @@ public class Car {
     private String get_car_lon;            //取车位置经度
     private String get_car_lat;            //取车位置纬度
     private Integer is_local;               //是否本地牌照    1:本地
+
+    public String getLicenseDay() {
+        return licenseDay;
+    }
+
+    public void setLicenseDay(String licenseDay) {
+        this.licenseDay = licenseDay;
+    }
 
     public String getBrand() {
         return brand;
