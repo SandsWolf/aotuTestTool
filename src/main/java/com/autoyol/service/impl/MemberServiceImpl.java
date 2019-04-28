@@ -98,10 +98,11 @@ public class MemberServiceImpl implements MemberService{
 			result.setData("无此用户：" + mobile);
 		}else{
 			memberMapper.updateMemberInfo(mobile);
+			memberMapper.updateMemberInfoB(mobile);
 			list = memberMapper.selectMemberInfoByMobile(mobile);
 			
 			Member member = list.get(0);
-			if(member.getId_card_auth()==2 && member.getDri_lic_auth()==2 && member.getDri_vice_lic_auth()==2 && member.getRent_flag()==1){
+			if(member.getId_card_auth()==2 && member.getDri_lic_auth()==2 && member.getDri_vice_lic_auth()==2 && member.getRent_flag()==1 && member.getLevel() == 5){
 				result.setStatus(0);
 				result.setMsg("success");
 				result.setData("用户：" + mobile + "，认证成功");

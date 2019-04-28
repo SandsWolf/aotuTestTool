@@ -526,8 +526,9 @@ function computeRentAmt(event){
     var weekendPrice = $("#input_weekendPrice").val().trim();
     var holiydaPrice = $("#input_holidayPrice").val().trim();
     var springPrice = $("#input_springPrice").val().trim();
-
     var rentAmtType = $('input:radio[name=rentAmt]:checked').val();
+
+
     // console.log("rentAmtType:" + rentAmtType);
 
     if (environment == "-请选择-") {

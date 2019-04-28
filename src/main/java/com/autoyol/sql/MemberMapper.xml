@@ -26,21 +26,30 @@
 			quasi_driving_type='C1' 
 		WHERE mobile = #{mobile}
 	</update>
-	
-	
+
+	<update id="updateMemberInfoB" parameterType="String">
+		UPDATE `auto_mem_auth`.`wecash_level` SET
+			result_mobile = '1',
+			result_identity_card = '1',
+			result_driving_license = '1',
+			level = '5'
+		WHERE mem_no =(select reg_no from member where mobile =  #{mobile})
+	</update>
+
 	<select id="selectMemberInfoByMobile" parameterType="String" resultType="com.autoyol.entity.Member">
 		SELECT 
-		  reg_no,
-		  mobile,
-		  id_card_auth,
-		  dri_lic_auth,
-		  dri_vice_lic_auth,
-		  rent_flag,
-		  token,
-		  dri_lic_first_time,
-		  internal_staff
+		  m.reg_no,
+		  m.mobile,
+		  m.id_card_auth,
+		  m.dri_lic_auth,
+		  m.dri_vice_lic_auth,
+		  m.rent_flag,
+		  m.token,
+		  m.dri_lic_first_time,
+		  m.internal_staff,
+		  l.level
 		FROM
-		  member  WHERE mobile = #{mobile}
+		  member m,`auto_mem_auth`.`wecash_level` l WHERE m.mobile = #{mobile} and m.reg_no = l.mem_no
 	</select>
 
 

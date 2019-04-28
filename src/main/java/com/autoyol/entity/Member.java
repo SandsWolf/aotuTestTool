@@ -10,6 +10,15 @@ public class Member {
 	private String token;				//token
 	private String dri_lic_first_time;	//驾驶证领证时间
 	private Integer internal_staff;		//内部员工:0否、1是
+	private Integer level;
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
 
 	public String getReg_no() {
 		return reg_no;
