@@ -9,8 +9,8 @@ import java.util.Map;
 
 public interface CarMapper {
     public Car selectCarInfo(String carPara);
-    public Car deleteTransFilter(String carNo);
-    public Car deleteCarFilter(String carNo);
+    public void deleteTransFilter(String carNo);
+    public void deleteCarFilter(String carNo);
     public Car selectInsureTotalPrices(String carPara);
     public DepositConfig selectCarDepositAmtInCityCode(String carNo);
     public DepositConfig selectCarDepositAmtOutCityCode(String carNo);
