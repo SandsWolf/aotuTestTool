@@ -5,6 +5,7 @@ import com.autoyol.entity.DepositConfig;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface CarMapper {
     public Car selectCarInfo(String carPara);
@@ -14,5 +15,6 @@ public interface CarMapper {
     public DepositConfig selectCarDepositAmtInCityCode(String carNo);
     public DepositConfig selectCarDepositAmtOutCityCode(String carNo);
     public List<DepositConfig> selectIDepositTextCode();
+    public void UpdateCarIsMemno(Map paraMap);
 
 }
