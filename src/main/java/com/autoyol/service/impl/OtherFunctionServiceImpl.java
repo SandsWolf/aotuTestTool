@@ -211,7 +211,6 @@ public class OtherFunctionServiceImpl implements OtherFunctionService{
 		String redisIP = pathIP.getRedisIp();
 		
 		Jedis jedis = new Jedis(redisIP);	//连接本地的 Redis 服务
-		
 		if(!"PONG".equals(jedis.ping())){	//查看服务是否运行
 			result.setStatus(0);
 			result.setMsg("success");

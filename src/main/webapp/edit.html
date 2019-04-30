@@ -82,7 +82,10 @@
             $("#tool_content").on("click","#get_depositAmt",{ip:ip},depositAmt);					//计算违章押金
             $("#tool_content").on("click","#get_mileOilCost",{ip:ip},mileOilCost);					//计算超里程 & 油费
 
-			//测试数据
+            $("#tool_content").on("click","#reset_car_isRent",{ip:ip},resetCarIsRent);					//重置车辆可租状态（MQ）
+
+
+            //测试数据
             $("#tool_content").on("click","#input_test_data",{ip:ip},inputTestData);  				//修改订单计算租金_输入测试数据
             $("#tool_content").on("click","#input_time_test_data",{ip:ip},inputTimeTestData);  		//时间轴测试数据
 
