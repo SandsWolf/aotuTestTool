@@ -143,13 +143,13 @@
     <!--清空trans_filter -->
     <delete id="deleteTransFilter">
         DELETE FROM trans_filter
-        where car_no = #{car_no}
+        where car_no = #{carNo}
     </delete>
 
     <!--清空car_filter -->
     <delete id="deleteCarFilter">
         DELETE FROM car_filter
-        where car_no = #{car_no}
+        where car_no = #{carNo}
     </delete>
 
 </mapper>

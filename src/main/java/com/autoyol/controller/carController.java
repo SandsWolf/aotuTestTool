@@ -1,6 +1,7 @@
 package com.autoyol.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.autoyol.dao.CarMapper;
 import com.autoyol.entity.PathIP;
 import com.autoyol.entity.Result;
@@ -19,7 +20,7 @@ public class carController {
     @Resource
     private CarService carService;
     @Resource
-    private CarMapper CarMapper;
+    private CarMapper carMapper;
 
 
     /**
