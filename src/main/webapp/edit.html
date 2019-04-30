@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -35,12 +35,14 @@
 	<script type="text/javascript" src="scripts/member.js"></script>
 	<script type="text/javascript" src="scripts/car.js"></script>
 
+
+
 	<script type="text/javascript">
         $(function(){
             var ip = "http://10.0.3.246:1160/";
             // var ip = "http://10.0.3.73:8080/test";
             // var ip = "http://10.0.3.73:8090/test";
-            // var ip = "http://localhost:8080/test";
+//             var ip = "http://localhost:8080/test";
 
 
             loadToolboxList(ip);
@@ -100,8 +102,6 @@
             $("#tool_content").on("blur","#input_dayPrice",setPublicDayPrice);          //设置公共日均价
             $("#tool_content").on("blur","#input_holidayPrice",setPublicHolidayPrice);  //设置公共节日均价
 
-			//车辆
-            $("#tool_content").on("click","#update_car_memno",{ip:ip},updateCarMemno);				//借车
 			//加载高德地图list
             $("#tool_content").on("blur","#input_address",{ip:ip},addressList);              					//加载高德地址select控件
             $("#tool_content").on("blur","#input_getAddress",{ip:ip},getAddressList);           				//加载高德取车地址select控件

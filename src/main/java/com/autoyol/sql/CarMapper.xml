@@ -143,19 +143,13 @@
     <!--清空trans_filter -->
     <delete id="deleteTransFilter">
         DELETE FROM trans_filter
-        where car_no = #{car_no}
+        where car_no = #{carNo}
     </delete>
 
     <!--清空car_filter -->
     <delete id="deleteCarFilter">
         DELETE FROM car_filter
-        where car_no = #{car_no}
+        where car_no = #{carNo}
     </delete>
-    <!--更换车辆的mem_no-->
-    <update id = "UpdateCarIsMemno" parameterType="map">
-        UPDATE `atzuchedb`.`car` c SET
-                c.`mem_no` = (SELECT reg_no FROM `atzuchedb`.`member` WHERE mobile = #{mobile}),
-                c.`mem_token` = (SELECT token FROM `atzuchedb`.`member` WHERE mobile = #{mobile})
-        WHERE plate_num = #{carPara} or reg_no = #{carPara}
-    </update>
+
 </mapper>
