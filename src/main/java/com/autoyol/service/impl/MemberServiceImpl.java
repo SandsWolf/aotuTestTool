@@ -1,10 +1,7 @@
 package com.autoyol.service.impl;
 
 import com.autoyol.dao.MemberMapper;
-import com.autoyol.entity.CommUseDriver;
-import com.autoyol.entity.Member;
-import com.autoyol.entity.PathIP;
-import com.autoyol.entity.Result;
+import com.autoyol.entity.*;
 import com.autoyol.http.HttpResponse;
 import com.autoyol.http.HttpUtils;
 import com.autoyol.service.MemberService;
@@ -20,8 +17,10 @@ import java.util.Map;
 public class MemberServiceImpl implements MemberService{
 	@Resource
 	private MemberMapper memberMapper;
-	
-	/**
+
+
+
+    /**
 	 * 会员注册
 	 * 登录验证码默认设置：111111
 	 */
@@ -89,32 +88,54 @@ public class MemberServiceImpl implements MemberService{
 	 * 会员认证
 	 */
 	public Result updateMemberInfo(String mobile) {
-		Result result = new Result();
-		List<Member> list = memberMapper.selectMemberInfoByMobile(mobile);
-		
-		if(list.size()==0){
-			result.setStatus(0);
-			result.setMsg("success");
-			result.setData("无此用户：" + mobile);
-		}else{
-			memberMapper.updateMemberInfo(mobile);
-			memberMapper.updateMemberInfoB(mobile);
-			list = memberMapper.selectMemberInfoByMobile(mobile);
-			
-			Member member = list.get(0);
-			if(member.getId_card_auth()==2 && member.getDri_lic_auth()==2 && member.getDri_vice_lic_auth()==2 && member.getRent_flag()==1 && member.getLevel() == 5){
-				result.setStatus(0);
-				result.setMsg("success");
-				result.setData("用户：" + mobile + "，认证成功");
-			}else{
-				result.setStatus(0);
-				result.setMsg("success");
-				result.setData("用户：" + mobile + "，认证失败");
-			}
-		}
-		
-		return result;
-	}
+
+        Result result = new Result();
+        List<Member> list = memberMapper.selectMemberInfoByMobile(mobile);
+        Member member = list.get(0);
+
+        Level level = memberMapper.selectWecashLevel(mobile);
+
+
+        if (list != null && list.size() == 0) {
+            result.setStatus(0);
+            result.setMsg("success");
+            result.setData("无此用户：" + mobile);
+            return result;
+        } else {
+            if (level == null) {
+                try {
+                    memberMapper.insertWecashLevel(member.getReg_no());
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+            } else {
+                memberMapper.updateMemberInfo(mobile);
+                memberMapper.updateMemberInfoB(mobile);
+            }
+
+            List<Member> newMember = memberMapper.selectMemberInfoByMobile(mobile);
+            member = newMember.get(0);
+            System.out.println("member"+member.toString());
+
+            Level newlevel = memberMapper.selectWecashLevel(mobile);
+
+
+
+
+            if (member.getId_card_auth() == 2 && member.getDri_lic_auth() == 2 && member.getDri_vice_lic_auth() == 2 && member.getRent_flag() == 1  &&  newlevel != null && "5".equals(newlevel.getLevel())) {
+                result.setStatus(0);
+                result.setMsg("success");
+                result.setData("用户：" + mobile + "，认证成功");
+            } else {
+                result.setStatus(0);
+                result.setMsg("success");
+                result.setData("用户：" + mobile + "，认证失败");
+            }
+        }
+
+        return result;
+
+    }
 
 
 	public Result getCommUseDrivers (String mobile, String memNo) {

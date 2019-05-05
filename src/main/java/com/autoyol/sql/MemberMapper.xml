@@ -38,18 +38,17 @@
 
 	<select id="selectMemberInfoByMobile" parameterType="String" resultType="com.autoyol.entity.Member">
 		SELECT 
-		  m.reg_no,
-		  m.mobile,
-		  m.id_card_auth,
-		  m.dri_lic_auth,
-		  m.dri_vice_lic_auth,
-		  m.rent_flag,
-		  m.token,
-		  m.dri_lic_first_time,
-		  m.internal_staff,
-		  l.level
+		  reg_no,
+		  mobile,
+		  id_card_auth,
+		  dri_lic_auth,
+		  dri_vice_lic_auth,
+		  rent_flag,
+		  token,
+		  dri_lic_first_time,
+		  internal_staff
 		FROM
-		  member m,`auto_mem_auth`.`wecash_level` l WHERE m.mobile = #{mobile} and m.reg_no = l.mem_no
+		  member  WHERE mobile = #{mobile}
 	</select>
 
 
@@ -66,5 +65,36 @@
 		  comm_use_driver  WHERE mem_no = #{memNo} AND is_auth='1' AND is_delete='0'
 	</select>
 
-	
+
+	<insert id="insertWecashLevel" parameterType="String" >
+		INSERT INTO auto_mem_auth.`wecash_level` (
+		  `mem_no`,
+		  `result_mobile`,
+		  `result_identity_card`,
+		  `result_driving_license`,
+		  `level`,
+		  `create_op`,
+		  `update_op`,
+		  `is_delete`
+		)
+		VALUES
+		  (
+			#{memNo},
+			'1',
+			'1',
+			'1',
+			'5',
+			'testTool',
+			'testTool',
+			'0'
+		  ) ;
+	</insert>
+
+    <select id="selectWecashLevel" parameterType="String" resultType="com.autoyol.entity.Level">
+        SELECT
+          LEVEL
+        FROM
+          `auto_mem_auth`.`wecash_level`
+        WHERE mem_no = (select reg_no from member where mobile = #{mobile})
+    </select>
 </mapper>
