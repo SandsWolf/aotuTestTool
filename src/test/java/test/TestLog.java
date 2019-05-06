@@ -1,5 +1,6 @@
 package test;
 
+import com.autoyol.dao.CarMapper;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +68,7 @@ public class TestLog {
         logger.error("异常");
 
     }
+
 
     public static void main(String[] args) {
 //        System.out.println(Math.ceil(1.01));

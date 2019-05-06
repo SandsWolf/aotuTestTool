@@ -101,9 +101,46 @@ public class carController {
             e.printStackTrace();
         }
         logger.info("更换车牌_Result",JSON.toJSONString(result.getData()));
-        result.setStatus(1);
+        result.setStatus(000000);
         result.setMsg("success");
         result.setData("恭喜" + mobile + "用户，偷车成功!!!");
+        return result;
+    }
+
+    /**
+     * 统计该手机号下车的数量
+     * @param mobile
+     * @return 车的数量
+     */
+    @RequestMapping(value = {"/memcarcount"}, method = {RequestMethod.POST})
+    @ResponseBody
+    public Result MemberCarCount(String environment,String mobile){
+        SetDateSourceUtil.setDataSourceName(environment);
+        Result result = new Result();
+        if (!ToolUtil.isMobile(mobile)){
+            result = ToolUtil.checkMobile(mobile);
+            return result;
+        }
+        List<Member> memberList = memberMapper.selectMemberInfoByMobile(mobile);
+        if (memberList.size() <= 0){
+            result.setStatus(1);
+            result.setMsg("success");
+            result.setData("会员（" + mobile + "）不存在，请确认后再试");
+            return result;
+        }
+
+
+        Integer count = 0;
+        try {
+            count = CarMapper.SelectCarCount(mobile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.info("统计会员名下车的总数_Result",JSON.toJSONString(result.getData()));
+        result.setStatus(000000);
+        result.setMsg("success");
+        result.setData(mobile + "用户名下车的总数量为：" + count);
+
         return result;
     }
 }
