@@ -16,22 +16,27 @@ public class CarServiceImpl implements CarService {
     public Result reSetRent(String car_no){
         Result result = new Result();
 
-        Car  car  = carMapper.selectCarInfo(car_no);
-        car_no = car.getReg_no();
+        try {
+            Car car  = carMapper.selectCarInfo(car_no);
+            if (car == null) {
+                result.setStatus(0);
+                result.setMsg("success");
+                result.setData("<br><span class='sign_span' style='color:red;'>carNo="+car_no+"，车辆不存在</span>");
+                return result;
+            } else {
+                car_no = car.getReg_no();
+                result.setStatus(0);
+                result.setMsg("success");
+                result.setData("重置成功，若车辆仍不可租请联系作者优化代码");
 
-        if (car_no != null && car_no != ""){
-            result.setStatus(0);
-            result.setMsg("success");
-            result.setData("重置成功，若车辆仍不可租请联系作者优化代码");
-
-            carMapper.deleteCarFilter(car_no);
-            carMapper.deleteTransFilter(car_no);
-
-        }else {
-            result.setStatus(0);
-            result.setMsg("success");
-            result.setData("车辆不存在，请重试");
+                carMapper.deleteCarFilter(car_no);
+                carMapper.deleteTransFilter(car_no);
+            }
+        } catch (Exception e) {
+            System.out.println("系统异常");
         }
+
+
         return result;
 
     }

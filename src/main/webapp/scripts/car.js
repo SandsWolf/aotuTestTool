@@ -1,9 +1,9 @@
 
-//订单结算
+//重置车辆可租状态
 function resetCarIsRent(event){
     $("#result_msg").empty();
     var environment = $("#set_environment").val();
-    var car_no = "";
+    var car_no = $("#car_no").val();
 
     if(environment == "-请选择-"){
         $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
@@ -17,9 +17,8 @@ function resetCarIsRent(event){
         return;
     }
 
-
     $.ajax({
-        url:event.data.ip + "/car/resetRent",
+        url:event.data.ip + "/car/reSetRent",
         type:"post",
         data:{"environment":environment,"car_no":car_no},
         dataType:"json",
@@ -48,6 +47,7 @@ function resetCarIsRent(event){
         }
     });
 }
+
 //借车
 function updateCarMemno(event){
     $("#result_msg").empty();
