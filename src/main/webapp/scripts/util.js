@@ -9,6 +9,11 @@ function setPublicMobile(){
     window.publicMobile = $("#input_mobile").val().trim();
 }
 
+// 设置公共任意匹配值
+function setPublicValue(){
+    window.publicMobile = $("#input_value").val().trim();
+}
+
 // 设置公共carNo
 function setPublicCarNo(){
     window.publicCarNo = $("#input_carNo").val().trim();

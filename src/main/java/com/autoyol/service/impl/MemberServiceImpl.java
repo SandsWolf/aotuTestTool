@@ -14,47 +14,46 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 	@Resource
 	private MemberMapper memberMapper;
 
 
-
-    /**
+	/**
 	 * 会员注册
 	 * 登录验证码默认设置：111111
 	 */
 	public Result createMember(String mobile, PathIP pathIP) {
 		Result result = new Result();
-		
+
 		//设置Redis
 		//连接 Redis 服务
-        Jedis jedis = new Jedis(pathIP.getRedisIp());
-        //设置 redis 登陆验证码,默认：111111
-        String str = jedis.set("LgCode:mobile:"+mobile, "111111");
-        if(!"OK".equals(str)){
-        	result.setStatus(0);
-    		result.setMsg("success");
-    		result.setData("Redis配置错误");
-    		return result;
-        }
-		
-        List<Member> list = memberMapper.selectMemberInfoByMobile(mobile);
-		if(list.size()!=0){
+		Jedis jedis = new Jedis(pathIP.getRedisIp());
+		//设置 redis 登陆验证码,默认：111111
+		String str = jedis.set("LgCode:mobile:" + mobile, "111111");
+		if (!"OK".equals(str)) {
 			result.setStatus(0);
-    		result.setMsg("success");
-    		result.setData("手机号：\"" + mobile + "\"已存在 ; 登录验证码：\"111111\"");
-    		return result;
+			result.setMsg("success");
+			result.setData("Redis配置错误");
+			return result;
 		}
-		
+
+		List<Member> list = memberMapper.selectMemberInfoByMobile(mobile);
+		if (list.size() != 0) {
+			result.setStatus(0);
+			result.setMsg("success");
+			result.setData("手机号：\"" + mobile + "\"已存在 ; 登录验证码：\"111111\"");
+			return result;
+		}
+
 		String url = pathIP.getServerIP() + "v31/mem/action/login";
-		
-		Map<String,String> headerMap = new HashMap<String, String>();
-		headerMap.put("Content-Type","application/json; charset=utf-8");
+
+		Map<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("Content-Type", "application/json; charset=utf-8");
 		headerMap.put("connection", "Keep-Alive");
 		headerMap.put("User-Agent", "AutoyolEs_console");
 		headerMap.put("Accept", "application/json;version=3.0;compress=false");
-		
+
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("OsVersion", "25");
 		paraMap.put("requestId", "90ADF7D73FA11513755451817");
@@ -73,73 +72,71 @@ public class MemberServiceImpl implements MemberService{
 		paraMap.put("PublicLongitude", "0");
 		paraMap.put("deviceName", "vivoX9s");
 		paraMap.put("PublicLatitude", "0");
-		
+
 		HttpResponse httpResult = HttpUtils.post(headerMap, url, paraMap, false, false);
-		
+
 		result.setStatus(0);
 		result.setMsg("success");
 		result.setData("手机号：\"" + mobile + "\"注册成功 ; 登录验证码：\"111111\"<br><br>" + httpResult.getResponseBodyObject().toString());
-		
+
 		return result;
 	}
 
-	
+
 	/**
 	 * 会员认证
 	 */
 	public Result updateMemberInfo(String mobile) {
 
-        Result result = new Result();
-        List<Member> list = memberMapper.selectMemberInfoByMobile(mobile);
-        Member member = list.get(0);
+		Result result = new Result();
+		List<Member> list = memberMapper.selectMemberInfoByMobile(mobile);
+		Member member = list.get(0);
 
-        Level level = memberMapper.selectWecashLevel(mobile);
+		Level level = memberMapper.selectWecashLevel(mobile);
 
 
-        if (list != null && list.size() == 0) {
-            result.setStatus(0);
-            result.setMsg("success");
-            result.setData("无此用户：" + mobile);
-            return result;
-        } else {
-            if (level == null) {
-                try {
-                    memberMapper.insertWecashLevel(member.getReg_no());
-                } catch (Exception e) {
-                    e.getMessage();
-                }
-            } else {
-                memberMapper.updateMemberInfo(mobile);
-            }
+		if (list != null && list.size() == 0) {
+			result.setStatus(0);
+			result.setMsg("success");
+			result.setData("无此用户：" + mobile);
+			return result;
+		} else {
+			if (level == null) {
+				try {
+					memberMapper.insertWecashLevel(member.getReg_no());
+				} catch (Exception e) {
+					e.getMessage();
+				}
+			} else {
+				memberMapper.updateMemberInfo(mobile);
+			}
 
 			memberMapper.updateMemberInfo(mobile);
 
 			List<Member> newMember = memberMapper.selectMemberInfoByMobile(mobile);
-            member = newMember.get(0);
-            System.out.println("member"+member.toString());
+			member = newMember.get(0);
+			System.out.println("member" + member.toString());
 
-            Level newlevel = memberMapper.selectWecashLevel(mobile);
-
-
+			Level newlevel = memberMapper.selectWecashLevel(mobile);
 
 
-            if (member.getId_card_auth() == 2 && member.getDri_lic_auth() == 2 && member.getDri_vice_lic_auth() == 2 && member.getRent_flag() == 1  &&  newlevel != null && "5".equals(newlevel.getLevel())) {
-                result.setStatus(0);
-                result.setMsg("success");
-                result.setData("用户：" + mobile + "，认证成功");
-            } else {
-                result.setStatus(0);
-                result.setMsg("success");
-                result.setData("用户：" + mobile + "，认证失败");
-            }
-        }
+			if (member.getId_card_auth() == 2 && member.getDri_lic_auth() == 2 && member.getDri_vice_lic_auth() == 2 && member.getRent_flag() == 1 && newlevel != null && "5".equals(newlevel.getLevel())) {
+				result.setStatus(0);
+				result.setMsg("success");
+				result.setData("用户：" + mobile + "，认证成功");
+			} else {
+				result.setStatus(0);
+				result.setMsg("success");
+				result.setData("用户：" + mobile + "，认证失败");
+			}
+		}
 
-        return result;
+		return result;
 
-    }
+	}
 
 
-	public Result getCommUseDrivers (String mobile, String memNo) {
+	public Result getCommUseDrivers(String mobile, String memNo) {
 		Result result = new Result();
 		List<CommUseDriver> list = memberMapper.selectCommUseDrivers(memNo);
 
@@ -158,4 +155,48 @@ public class MemberServiceImpl implements MemberService{
 		}
 		return result;
 	}
+
+	/**
+	 * 用token获取手机号或用手机号获取token信息
+	 */
+	public Result getMobileOrToken(String value) {
+
+		Result result = new Result();
+		if (value == null && value == "") {
+			String str = "请检查输入是否正确";
+			result.setStatus(0);
+			result.setMsg("success");
+			result.setData(str);
+		} else if (value.length() == 11) {
+			List<Member> list = memberMapper.selectMemberInfoByMobile(value);
+			Member member = list.get(0);
+			if (list != null && list.size() == 0) {
+				result.setStatus(0);
+				result.setMsg("success");
+				result.setData("无此用户：" + value);
+			} else {
+				String str;
+				str = list.get(0).getToken();
+				result.setStatus(0);
+				result.setMsg("success");
+				result.setData(str);
+            }
+		} else {
+			List<Member> list = memberMapper.selectMemberInfoByToken(value);
+			Member member = list.get(0);
+			if (list != null && list.size() == 0) {
+				result.setStatus(0);
+				result.setMsg("success");
+				result.setData("无此用户：" + value);
+			} else {
+				String str;
+				str = list.get(0).getMobile();
+				result.setStatus(0);
+				result.setMsg("success");
+				result.setData(str);
+
+            }
+		}
+        return result;
+    }
 }

@@ -51,6 +51,20 @@
 		  member  WHERE mobile = #{mobile}
 	</select>
 
+	<select id="selectMemberInfoByToken" parameterType="String" resultType="com.autoyol.entity.Member">
+		SELECT
+		reg_no,
+		mobile,
+		id_card_auth,
+		dri_lic_auth,
+		dri_vice_lic_auth,
+		rent_flag,
+		token,
+		dri_lic_first_time,
+		internal_staff
+		FROM
+		member  WHERE token = #{token}
+	</select>
 
 	<select id="selectCommUseDrivers" parameterType="String" resultType="com.autoyol.entity.CommUseDriver">
 		SELECT

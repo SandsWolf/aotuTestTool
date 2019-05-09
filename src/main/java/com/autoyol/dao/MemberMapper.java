@@ -11,6 +11,7 @@ public interface MemberMapper {
 	public void updateMemberInfoB(String mobile);
 	public void insertWecashLevel(String memNo);
 	public List<Member> selectMemberInfoByMobile(String mobile);
+	public List<Member> selectMemberInfoByToken(String token);
 	public List<CommUseDriver> selectCommUseDrivers(String memNo);
 	public Level selectWecashLevel(String memNo);
 }

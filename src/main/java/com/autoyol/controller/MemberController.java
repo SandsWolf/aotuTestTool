@@ -120,4 +120,32 @@ public class MemberController {
 //		result = memberService.getCommUseDrivers(mobile,list.get(0).getReg_no());
 		return result;
 	}
+
+	/**
+	 * 获取手机号对应token/获取token对应手机号
+	 * @param environment
+	 * @param mobile
+	 * @param token
+	 * @return
+	 */
+	@RequestMapping("/getMobileOrToken")
+	@ResponseBody
+	public Result getMobileOrToken(String environment, String value){
+		SetDateSourceUtil.setDataSourceName(environment);
+		Result result = new Result();
+		try {
+			List<Member> list = memberMapper.selectMemberInfoByMobile(value);
+			if (list.size() == 0) {
+				result.setStatus(1);
+				result.setMsg("success");
+				result.setData("手机号：\"" + value + "\"不存在 ; 请确认后再试");
+				return result;
+			}
+
+			result = memberService.getMobileOrToken(value);
+		} catch (Exception e) {
+		}
+
+		return result;
+	}
 }
