@@ -2,6 +2,7 @@ package com.autoyol.dao;
 
 import com.autoyol.entity.Car;
 import com.autoyol.entity.DepositConfig;
+import com.autoyol.entity.Result;
 
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface CarMapper {
     public DepositConfig selectCarDepositAmtOutCityCode(String carNo);
     public List<DepositConfig> selectIDepositTextCode();
     public void UpdateCarIsMemno(Map paraMap);
-
+    public Integer SelectCarCount(String mobile);
 }

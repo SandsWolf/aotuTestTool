@@ -125,7 +125,15 @@ public class TestTrans {
         }
     }
 
+    /**
+     * 测试根据手机号查询车辆数量
+     */
+    @Test
+    public void testcarcount(){
+        Integer a = carMapper.SelectCarCount("15921237683");
+        System.out.println(a);
 
+    }
     @Test
     public void testGetReturnFee () {
         String environment = "test1_autoFeeService";    // test1 取还车费用 系数库
