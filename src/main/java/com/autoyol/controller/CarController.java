@@ -6,7 +6,6 @@ import com.autoyol.dao.CarMapper;
 import com.autoyol.dao.MemberMapper;
 import com.autoyol.entity.Car;
 import com.autoyol.entity.Member;
-import com.autoyol.entity.PathIP;
 import com.autoyol.entity.Result;
 import com.autoyol.service.CarService;
 import com.autoyol.util.SetDateSourceUtil;
@@ -25,14 +24,14 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/car")
-public class carController {
+public class CarController {
     @Resource
     private CarService carService;
     @Resource
     private CarMapper CarMapper;
     @Resource
     private MemberMapper memberMapper;
-    private static final Logger logger = LoggerFactory.getLogger(carController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CarController.class);
 
 
     /**
@@ -41,6 +40,7 @@ public class carController {
      * @param car_no
      * @return
      */
+
     @RequestMapping("/reSetRent")
     @ResponseBody
     public Result reSetRent(String environment, String car_no){
