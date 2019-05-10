@@ -59,6 +59,17 @@ public class TestTrans {
 //        pathIP = ToolUtil.getIP(environment);
     }
 
+    @Test
+    public void testSelectcarno(){
+        String environment = "test_1";
+        SetDateSourceUtil.setDataSourceName(environment);
+        List<Long> list = new ArrayList<>();
+        list.addAll(carMapper.selectCarNo("15921237683"));
+        System.out.println(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));  //.get(index)
+        }
+    }
     /**
      *  设置订单流程时控制租期时间
      */
@@ -192,6 +203,7 @@ public class TestTrans {
 
 
     }
+
 
 
 

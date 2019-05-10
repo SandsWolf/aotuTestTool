@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,6 +123,7 @@ public class CarController {
             return result;
         }
         List<Member> memberList = memberMapper.selectMemberInfoByMobile(mobile);
+
         if (memberList.size() <= 0){
             result.setStatus(1);
             result.setMsg("success");
@@ -130,6 +132,8 @@ public class CarController {
         }
 
 
+        List<Long> carregnolist = new ArrayList<>();
+        carregnolist.addAll(CarMapper.selectCarNo(mobile));
         Integer count = 0;
         try {
             count = CarMapper.SelectCarCount(mobile);
@@ -139,8 +143,7 @@ public class CarController {
         logger.info("统计会员名下车的总数_Result",JSON.toJSONString(result.getData()));
         result.setStatus(000000);
         result.setMsg("success");
-        result.setData(mobile + "用户名下车的总数量为：" + count);
-
+        result.setData(mobile + "用户名下车的总数量为：" + count + "car_no：" +  carregnolist.toString());
         return result;
     }
 }

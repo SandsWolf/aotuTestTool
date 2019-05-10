@@ -162,4 +162,9 @@
     <select id="SelectCarCount" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM `atzuchedb`.`car` WHERE mem_no = (SELECT reg_no FROM `atzuchedb`.`member` WHERE mobile = #{mobile})
     </select>
+    <!--查询车辆car_no-->
+    <select id="selectCarNo" parameterType="string" resultType="long">
+        SELECT reg_no FROM `atzuchedb`.`car` WHERE mem_no = (SELECT reg_no FROM `atzuchedb`.`member` WHERE mobile = #{mobile})
+    </select>
+
 </mapper>

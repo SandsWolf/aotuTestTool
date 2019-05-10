@@ -8,8 +8,10 @@ import org.slf4j.LoggerFactory;
 import java.util.Random;
 
 public class TestLog {
+
 //    Log log = LogFactory.getLog(Test1.class);
     private static final Logger logger = LoggerFactory.getLogger(TestLog.class);
+
 
     @Test
     public void testInteger() {
