@@ -5,6 +5,7 @@ import com.autoyol.entity.*;
 import com.autoyol.http.HttpResponse;
 import com.autoyol.http.HttpUtils;
 import com.autoyol.service.MemberService;
+import com.autoyol.util.ToolUtil;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
@@ -159,7 +160,7 @@ public class MemberServiceImpl implements MemberService {
 	/**
 	 * 用token获取手机号或用手机号获取token信息
 	 */
-	public Result getMobileOrToken(String value) {
+	public Result getMobileOrToken(String environment,String value) {
 
 		Result result = new Result();
 		if (value == null && value == "") {
@@ -169,7 +170,6 @@ public class MemberServiceImpl implements MemberService {
 			result.setData(str);
 		} else if (value.length() == 11) {
 			List<Member> list = memberMapper.selectMemberInfoByMobile(value);
-			Member member = list.get(0);
 			if (list != null && list.size() == 0) {
 				result.setStatus(0);
 				result.setMsg("success");
@@ -183,11 +183,29 @@ public class MemberServiceImpl implements MemberService {
             }
 		} else {
 			List<Member> list = memberMapper.selectMemberInfoByToken(value);
-			Member member = list.get(0);
 			if (list != null && list.size() == 0) {
-				result.setStatus(0);
-				result.setMsg("success");
-				result.setData("无此用户：" + value);
+				PathIP pathIP = ToolUtil.getIP(environment);
+				String redisIP = pathIP.getRedisIp();
+
+				Jedis jedis = new Jedis(redisIP);	//连接本地的 Redis 服务
+				if(!"PONG".equals(jedis.ping())){	//查看服务是否运行
+					result.setStatus(0);
+					result.setMsg("success");
+					result.setData("\""+environment+"\"环境的Redis服务没在运行，请检查");
+					return result;
+				}
+
+				String str = jedis.get("user:center:token:"+value);	// raids 通过key 查 value
+				if(str != null){
+					result.setStatus(0);
+					result.setMsg("success");
+					result.setData(str);
+				}else{
+					result.setStatus(0);
+					result.setMsg("success");
+					result.setData("无此用户：" + value);
+				}
+
 			} else {
 				String str;
 				str = list.get(0).getMobile();

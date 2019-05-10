@@ -7,6 +7,6 @@ public interface MemberService {
 	public Result updateMemberInfo(String mobile);
 	public Result createMember(String mobile, PathIP pathIP);
 	public Result getCommUseDrivers (String mobile, String memNo);
-	public Result getMobileOrToken (String value);
+	public Result getMobileOrToken (String environment,String value);
 
 }

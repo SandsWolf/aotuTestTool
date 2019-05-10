@@ -124,8 +124,7 @@ public class MemberController {
 	/**
 	 * 获取手机号对应token/获取token对应手机号
 	 * @param environment
-	 * @param mobile
-	 * @param token
+	 * @param value
 	 * @return
 	 */
 	@RequestMapping("/getMobileOrToken")
@@ -133,18 +132,25 @@ public class MemberController {
 	public Result getMobileOrToken(String environment, String value){
 		SetDateSourceUtil.setDataSourceName(environment);
 		Result result = new Result();
-		try {
-			List<Member> list = memberMapper.selectMemberInfoByMobile(value);
-			if (list.size() == 0) {
-				result.setStatus(1);
-				result.setMsg("success");
-				result.setData("手机号：\"" + value + "\"不存在 ; 请确认后再试");
-				return result;
-			}
 
-			result = memberService.getMobileOrToken(value);
-		} catch (Exception e) {
-		}
+		if (value.length() == 11) {
+			try {
+				List<Member> list = memberMapper.selectMemberInfoByMobile(value);
+				if (list.size() == 0) {
+					result.setStatus(1);
+					result.setMsg("success");
+					result.setData("手机号：\"" + value + "\"不存在 ; 请确认后再试");
+					return result;
+				} else {
+                    result = memberService.getMobileOrToken(environment,value);
+                }
+
+			} catch (Exception e) {
+				logger.error("查询用户信息异常",e);
+			}
+		} else {
+            result = memberService.getMobileOrToken(environment,value);
+        }
 
 		return result;
 	}
