@@ -18,4 +18,5 @@ public interface CarMapper {
     public List<DepositConfig> selectIDepositTextCode();
     public void UpdateCarIsMemno(Map paraMap);
     public Integer SelectCarCount(String mobile);
+    public List<Long> selectCarNo(String mobile);
 }
