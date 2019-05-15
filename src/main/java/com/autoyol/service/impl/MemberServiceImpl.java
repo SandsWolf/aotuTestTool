@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.autoyol.util.JsonFormatUtil.formatJson;
+
 @Service
 public class MemberServiceImpl implements MemberService {
 	@Resource
@@ -197,6 +199,7 @@ public class MemberServiceImpl implements MemberService {
 
 				String str = jedis.get("user:center:token:"+value);	// raids 通过key 查 value
 				if(str != null){
+					str = formatJson(str);
 					result.setStatus(0);
 					result.setMsg("success");
 					result.setData(str);
