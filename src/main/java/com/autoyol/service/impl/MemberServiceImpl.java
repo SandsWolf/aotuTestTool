@@ -11,6 +11,7 @@ import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -164,38 +165,53 @@ public class MemberServiceImpl implements MemberService {
 	 */
 	public Result getMobileOrToken(String environment,String value) {
 
-		Result result = new Result();
-		if (value == null && value == "") {
+        List<Member> list = memberMapper.selectMemberInfoByMobile(value);
+
+        Result result = new Result();
+
+        PathIP pathIP = ToolUtil.getIP(environment);
+        String redisIP = pathIP.getRedisIp();
+
+        Jedis jedis = new Jedis(redisIP);	//连接本地的 Redis 服务
+
+        if(!"PONG".equals(jedis.ping())){	//查看服务是否运行
+            result.setStatus(0);
+            result.setMsg("success");
+            result.setData("\""+environment+"\"环境的Redis服务没在运行，请检查");
+            return result;
+        }
+
+        if (value == null && value == "") {
 			String str = "请检查输入是否正确";
 			result.setStatus(0);
 			result.setMsg("success");
 			result.setData(str);
 		} else if (value.length() == 11) {
-			List<Member> list = memberMapper.selectMemberInfoByMobile(value);
 			if (list != null && list.size() == 0) {
 				result.setStatus(0);
 				result.setMsg("success");
 				result.setData("无此用户：" + value);
 			} else {
-				String str;
-				str = list.get(0).getToken();
-				result.setStatus(0);
+                String str = "";
+                str = "数据库token为：" + list.get(0).getToken();
+                String memNo = list.get(0).getReg_no();
+                Map<String, String> map;
+                map = jedis.hgetAll("user:center:token:" + memNo);
+                //使用迭代器，获取key
+                Iterator<Map.Entry<String,String>> iter = map.entrySet().iterator();
+                while(iter.hasNext()){
+					Map.Entry<String,String> entry = iter.next();
+					String token = entry.getKey();
+					String res = "               " + "redis用户信息如下：" + jedis.get("user:center:token:"+token);	// raids 通过key 查 value
+                    str += res;
+                }
+                str = formatJson(str);
+                result.setStatus(0);
 				result.setMsg("success");
-				result.setData(str);
+                result.setData(str);
             }
 		} else {
-			List<Member> list = memberMapper.selectMemberInfoByToken(value);
 			if (list != null && list.size() == 0) {
-				PathIP pathIP = ToolUtil.getIP(environment);
-				String redisIP = pathIP.getRedisIp();
-
-				Jedis jedis = new Jedis(redisIP);	//连接本地的 Redis 服务
-				if(!"PONG".equals(jedis.ping())){	//查看服务是否运行
-					result.setStatus(0);
-					result.setMsg("success");
-					result.setData("\""+environment+"\"环境的Redis服务没在运行，请检查");
-					return result;
-				}
 
 				String str = jedis.get("user:center:token:"+value);	// raids 通过key 查 value
 				if(str != null){
