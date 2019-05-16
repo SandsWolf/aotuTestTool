@@ -202,7 +202,7 @@ public class MemberServiceImpl implements MemberService {
                 while(iter.hasNext()){
 					Map.Entry<String,String> entry = iter.next();
 					String token = entry.getKey();
-					String res = "               " + "redis用户信息如下：" + jedis.get("user:center:token:"+token);	// raids 通过key 查 value
+					String res = "\r" + "redis用户信息如下：" + jedis.get("user:center:token:"+token);	// raids 通过key 查 value
                     str += res;
                 }
                 str = formatJson(str);

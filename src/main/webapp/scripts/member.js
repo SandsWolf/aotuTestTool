@@ -144,7 +144,7 @@ function getMobileOrToken(event){
                 $("#result_msg").empty();
 
                 var resultMsg = result.data;
-                var li = "<br><span class='sign_span'><b>结果：<br></span><br><span class='sign_span' style='color:red;'>" + resultMsg + "</span></b></span>";
+                var li = "<br><pre class='sign_span'><b>结果：<br></pre><br><pre class='sign_span' style='color:red;'>" + resultMsg + "</pre></b></pre>";
                 var $li = $(li);
                 $("#result_msg").append($li);
             }
@@ -153,7 +153,7 @@ function getMobileOrToken(event){
                 $("#result_msg").empty();
 
                 var resultMsg = result.data;
-                var li = "<br><span class='sign_span'><b>结果：<br>" + resultMsg + "</b></span>";
+                var li = "<br><pre class='sign_span'><b>结果：<br>" + resultMsg + "</b></pre>";
                 var $li = $(li);
                 $("#result_msg").append($li);
             }
