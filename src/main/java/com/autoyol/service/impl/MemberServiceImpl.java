@@ -115,7 +115,7 @@ public class MemberServiceImpl implements MemberService {
                 memberMapper.updateMemberInfo(mobile);
             }
 
-            memberMapper.updateMemberInfo(mobile);
+            memberMapper.updateMemberInfoB(mobile);
 
             List<Member> newMember = memberMapper.selectMemberInfoByMobile(mobile);
             member = newMember.get(0);
