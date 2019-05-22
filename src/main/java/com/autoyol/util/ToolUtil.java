@@ -534,7 +534,8 @@ public class ToolUtil {
 			pathIP.setTransIP("http://114.55.235.185:8086/");
 			pathIP.setRedisIp("121.199.4.107");
 			pathIP.setCarCommentIP("http://120.27.160.15:8018/");
-			pathIP.setVirtualuserIP("http://114.55.235.185:998/");
+			pathIP.setVirtualuserIP("http://121.199.4.107:1036/");
+			pathIP.setInterFaceIP("http://114.55.235.185:998/");
 		}
 		if("test_9".equals(environment)){
 			pathIP.setEnvironment(environment);
