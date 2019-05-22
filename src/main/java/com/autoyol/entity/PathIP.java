@@ -12,6 +12,16 @@ public class PathIP{
 	private String carCommentIP;		//评价服务
 	private String virtualuserIP;		//虚拟会员服务：新token
 
+	public String getInterFaceIP() {
+		return InterFaceIP;
+	}
+
+	public void setInterFaceIP(String interFaceIP) {
+		InterFaceIP = interFaceIP;
+	}
+
+	private String InterFaceIP;		//Interface
+
 	public String getCarCommentIP() {
 		return carCommentIP;
 	}

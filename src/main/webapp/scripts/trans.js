@@ -1284,3 +1284,71 @@ function statusflow(event){
         }
     });
 }
+
+
+
+//携程下单
+function createCtripTrans(event){
+    $("#result_msg").empty();
+    var environment = $("#set_environment").val();
+    var pickupDate = $("#input_rentTime").val().trim();
+    var returnDate = $("#input_revertTime").val().trim();
+
+
+    if(environment == "-请选择-"){
+        $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
+        $("#can").load("alert/alert_environment.html");//显示对话框
+        return;
+    }
+
+    if(environment == "线上"){
+        $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
+        $("#can").load("alert/alert_online.html");//显示对话框
+        return;
+    }
+
+    if(pickupDate == ""){
+        alert("请输入取车时间");
+        return;
+    }
+
+    if(returnDate == ""){
+        alert("请输入还车时间");
+        return;
+    }
+
+
+    $.ajax({
+        url:event.data.ip + "/ctrip/createTrans",
+        type:"post",
+        data:{"environment":environment,"pickupDate":pickupDate,"returnDate":returnDate},
+        dataType:"json",
+        success:function(result){
+            if(result.status==1){
+                $("#result_msg").empty();
+
+                var resultMsg = result.data;
+                var li = "<br><span class='sign_span'><b>结果：<br></span><br><span class='sign_span' style='color:red;'>" + resultMsg + "</span></b></span>";
+                var $li = $(li);
+                $("#result_msg").append($li);
+            }
+
+            if(result.status==0){
+                $("#result_msg").empty();
+                $("#status_flow").removeAttr("disabled");   //提交按钮恢复
+
+                var resultMsg = result.data;
+                // var li = "<br><br><span class='sign_span'><b>结果：<br><br>" + resultMsg + "</b></span>";
+                var li = "<br><span class='sign_span'><b>结果：<br></span><br><pre class='sign_span' style='color:red;'>" + resultMsg + "</pre></b></pre>";
+                var $li = $(li);
+                $("#result_msg").append($li);
+            }
+        },
+        error:function(){
+            $("#result_msg").empty();
+            $("#status_flow").removeAttr("disabled");   //提交按钮恢复
+            $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
+            $("#can").load("alert/alert_error.html");//显示对话框
+        }
+    });
+}

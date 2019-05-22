@@ -10,6 +10,10 @@ public class Member {
 	private String token;				//token
 	private String dri_lic_first_time;	//驾驶证领证时间
 	private Integer internal_staff;		//内部员工:0否、1是
+	private String id_no;
+	private String name;
+	private String id_no_type;
+
 
 
 	public String getReg_no() {
@@ -82,6 +86,30 @@ public class Member {
 
 	public void setInternal_staff(Integer internal_staff) {
 		this.internal_staff = internal_staff;
+	}
+
+	public String getId_no() {
+		return id_no;
+	}
+
+	public void setId_no(String id_no) {
+		this.id_no = id_no;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getId_no_type() {
+		return id_no_type;
+	}
+
+	public void setId_no_type(String id_no_type) {
+		this.id_no_type = id_no_type;
 	}
 
 	@Override

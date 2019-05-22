@@ -488,6 +488,7 @@ public class ToolUtil {
 			pathIP.setRedisIp("10.0.3.200");
 			pathIP.setCarCommentIP("http://10.0.3.234:8018/");
 			pathIP.setVirtualuserIP("http://10.0.3.234:1036/");
+			pathIP.setInterFaceIP("http://10.0.3.205:998/");
 		}
 		if("test_2".equals(environment)){
 			pathIP.setEnvironment(environment);
@@ -498,6 +499,8 @@ public class ToolUtil {
 			pathIP.setRedisIp("10.0.3.211");
 			pathIP.setCarCommentIP("http://10.0.3.211:8018/");
 			pathIP.setVirtualuserIP("http://10.0.3.252:1036/");
+			pathIP.setInterFaceIP("http://10.0.3.213:998/");
+
 		}
 		if("test_3".equals(environment)){
 			pathIP.setEnvironment(environment);
@@ -508,6 +511,8 @@ public class ToolUtil {
 			pathIP.setRedisIp("10.0.3.206");
 			pathIP.setCarCommentIP("http://10.0.3.236:8018/");
 			pathIP.setVirtualuserIP("http://10.0.3.253:1036/");
+			pathIP.setInterFaceIP("http://10.0.3.207:998/");
+
 		}
 		if("test_4".equals(environment)){
 			pathIP.setEnvironment(environment);
@@ -518,6 +523,8 @@ public class ToolUtil {
 			pathIP.setRedisIp("10.0.3.224");
 			pathIP.setCarCommentIP("http://10.0.3.237:8018/");
 			pathIP.setVirtualuserIP("http://10.0.3.223:1036/");
+			pathIP.setInterFaceIP("http://10.0.3.223:998/");
+
 		}
 		if("test_5".equals(environment)){
 			pathIP.setEnvironment(environment);
@@ -527,7 +534,7 @@ public class ToolUtil {
 			pathIP.setTransIP("http://114.55.235.185:8086/");
 			pathIP.setRedisIp("121.199.4.107");
 			pathIP.setCarCommentIP("http://120.27.160.15:8018/");
-			pathIP.setVirtualuserIP("http://121.199.4.107:1036/");
+			pathIP.setVirtualuserIP("http://114.55.235.185:998/");
 		}
 		if("test_9".equals(environment)){
 			pathIP.setEnvironment(environment);
@@ -538,6 +545,8 @@ public class ToolUtil {
 			pathIP.setRedisIp("47.96.104.13");
 			pathIP.setCarCommentIP("");
 			pathIP.setVirtualuserIP("");
+			pathIP.setInterFaceIP("http://47.96.104.13:998/");
+
 		}
 		if("线上".equals(environment)){
 			pathIP.setEnvironment(environment);
