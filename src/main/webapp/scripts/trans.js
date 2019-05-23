@@ -1293,6 +1293,10 @@ function createCtripTrans(event){
     var environment = $("#set_environment").val();
     var pickupDate = $("#input_rentTime").val().trim();
     var returnDate = $("#input_revertTime").val().trim();
+    var cityCode = $("#input_cityCode").val().trim();
+    var vehicleCode = $("#input_value").val().trim();
+
+
 
 
     if(environment == "-请选择-"){
@@ -1321,7 +1325,7 @@ function createCtripTrans(event){
     $.ajax({
         url:event.data.ip + "/ctrip/createTrans",
         type:"post",
-        data:{"environment":environment,"pickupDate":pickupDate,"returnDate":returnDate},
+        data:{"environment":environment,"pickupDate":pickupDate,"returnDate":returnDate,"cityCode":cityCode,"vehicleCode":vehicleCode},
         dataType:"json",
         success:function(result){
             if(result.status==1){
@@ -1363,6 +1367,8 @@ function selectCtripInventory(event){
     var environment = $("#set_environment").val();
     var pickupDate = $("#input_rentTime").val().trim();
     var returnDate = $("#input_revertTime").val().trim();
+    var cityCode = $("#input_cityCode").val().trim();
+
 
 
     if(environment == "-请选择-"){
@@ -1391,7 +1397,7 @@ function selectCtripInventory(event){
     $.ajax({
         url:event.data.ip + "/ctrip/selectInventory",
         type:"post",
-        data:{"environment":environment,"pickupDate":pickupDate,"returnDate":returnDate},
+        data:{"environment":environment,"pickupDate":pickupDate,"returnDate":returnDate,"cityCode":cityCode},
         dataType:"json",
         success:function(result){
             if(result.status==1){

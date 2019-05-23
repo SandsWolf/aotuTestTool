@@ -67,6 +67,12 @@ function setPublicHolidayPrice(){
     window.publicHolidayPrice = $("#input_holidayPrice").val().trim();
 }
 
+
+// 设置公共cityCode
+function setPublicCityCode(){
+    window.publicHolidayPrice = $("#input_cityCode").val().trim();
+}
+
 // 加载【高德地址select控件】
 function addressList(event){
     var address = $("#input_address").val().trim();

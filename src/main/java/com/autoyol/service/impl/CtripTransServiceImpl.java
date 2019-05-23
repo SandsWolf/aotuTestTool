@@ -18,7 +18,7 @@ import static com.autoyol.util.JsonFormatUtil.formatJson;
 public class CtripTransServiceImpl implements CtripTransService{
 
     @Override
-    public Result createTrans(String pickupDate, String returnDate, String uri, String cityCode) {
+    public Result createTrans(String pickupDate, String returnDate, String uri, String cityCode, String vehicleCode) {
 
         Result result = new Result();
 
@@ -27,7 +27,7 @@ public class CtripTransServiceImpl implements CtripTransService{
 
 
         map.put("orderId", "32112827206112");
-        map.put("vehicleCode", "499");
+        map.put("vehicleCode", vehicleCode);
         map.put("pickupDate", pickupDate.substring(0,16));
         map.put("returnDate", returnDate.substring(0,16)); //还车时间
         map.put("pickupStoreCode", cityCode);

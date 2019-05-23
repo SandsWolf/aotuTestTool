@@ -23,11 +23,12 @@ public class CtripTransController {
      * @param pickupDate
      * @param returnDate
      * @param cityCode
+     * @param vehicleCode
      * @return
      */
     @RequestMapping("/createTrans")
     @ResponseBody
-    public Result createTrans(String environment,String pickupDate,String returnDate,String cityCode){
+    public Result createTrans(String environment,String pickupDate,String returnDate,String cityCode,String vehicleCode){
         Result result = new Result();
         if("线上".equals(environment)){
             result.setStatus(1);
@@ -38,7 +39,7 @@ public class CtripTransController {
 
         String uri = ToolUtil.getIP(environment).getInterFaceIP();
 
-        result = ctripTransService.createTrans(pickupDate,returnDate,uri,cityCode);
+        result = ctripTransService.createTrans(pickupDate,returnDate,uri,cityCode,vehicleCode);
         return result;
     }
 
@@ -54,7 +55,7 @@ public class CtripTransController {
      */
     @RequestMapping("/selectInventory")
     @ResponseBody
-    public Result createTrans(String environment,String pickupDate,String returnDate,String cityCode){
+    public Result selectCtripInventory(String environment,String pickupDate,String returnDate,String cityCode){
         Result result = new Result();
         if("线上".equals(environment)){
             result.setStatus(1);

@@ -87,7 +87,7 @@
             $("#tool_content").on("click","#reset_car_isRent",{ip:ip},resetCarIsRent);					//重置车辆可租状态（MQ）
             $("#tool_content").on("click","#get_mobileOrToken",{ip:ip},getMobileOrToken);					//查询用户信息（MQ）
             $("#tool_content").on("click","#create_CtripTrans",{ip:ip},createCtripTrans);					//携程下单（MQ）
-            $("#tool_content").on("click","#create_CtripTrans",{ip:ip},selectCtripInventory);					//携程套餐查询（MQ）
+            $("#tool_content").on("click","#select_CtripInventory",{ip:ip},selectCtripInventory);					//携程套餐查询（MQ）
 
 
 
@@ -107,8 +107,11 @@
             $("#tool_content").on("blur","#input_lat",setPublicLat);                    //设置公共维度
             $("#tool_content").on("blur","#input_dayPrice",setPublicDayPrice);          //设置公共日均价
             $("#tool_content").on("blur","#input_holidayPrice",setPublicHolidayPrice);  //设置公共节日均价
+            $("#tool_content").on("blur","#input_cityCode",setPublicCityCode);  //设置公共节日均价
 
-			//车辆
+
+
+            //车辆
             $("#tool_content").on("click","#update_car_memno",{ip:ip},updateCarMemno);				//借车
             $("#tool_content").on("click","#select_mem_car_count",{ip:ip},selectMemCarCount);				//统计账号名下车辆总数
 			//加载高德地图list
