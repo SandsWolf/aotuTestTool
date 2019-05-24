@@ -39,6 +39,8 @@ public class SetDateSourceUtil {
         	dataSource = "test_4DB";
         } else if ("test_5".equals(dataSource)) {
         	dataSource = "test_5DB";
+        } else if ("test_6".equals(dataSource)) {
+            dataSource = "test_6DB";
         } else if ("test_9".equals(dataSource)) {
             dataSource = "test_9DB";
         } else if ("线上".equals(dataSource)) {

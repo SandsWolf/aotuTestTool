@@ -28,6 +28,7 @@
             <entry value-ref="test3DB" key="test_3DB"></entry>
             <entry value-ref="test4DB" key="test_4DB"></entry>
             <entry value-ref="test5DB" key="test_5DB"></entry>
+			<entry value-ref="test6DB" key="test_6DB"></entry>
 			<entry value-ref="test9DB" key="test_9DB"></entry>
             <entry value-ref="onlineDB" key="on_lineDB"></entry>
 			<entry value-ref="onlineHolidayDB" key="on_lineHolidayDB"></entry>
@@ -80,6 +81,13 @@
 	<property name="password" value="${test5_pwd}"></property>
 	<property name="url" value="${test5_url}"></property>
 	<property name="driverClassName" value="${test5_driver}"></property>
+</bean>
+
+<bean id="test6DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="username" value="${test6_username}"></property>
+	<property name="password" value="${test6_pwd}"></property>
+	<property name="url" value="${test6_url}"></property>
+	<property name="driverClassName" value="${test6_driver}"></property>
 </bean>
 
 <bean id="test9DB" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

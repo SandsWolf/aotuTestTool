@@ -537,6 +537,17 @@ public class ToolUtil {
 			pathIP.setVirtualuserIP("http://121.199.4.107:1036/");
 			pathIP.setInterFaceIP("http://114.55.235.185:998/");
 		}
+		if("test_6".equals(environment)){
+			pathIP.setEnvironment(environment);
+			pathIP.setServerIP("http://10.0.3.250:7064/");
+			pathIP.setWebconsoleIP("http://10.0.3.249:9031/");
+			pathIP.setAutoTVServiceIP("http://10.0.3.250:7262/");
+			pathIP.setTransIP("");  // test6 没结算服务
+			pathIP.setRedisIp("10.0.3.49");
+			pathIP.setCarCommentIP("");
+			pathIP.setVirtualuserIP("");
+			pathIP.setInterFaceIP("http://10.0.3.250:998/");
+		}
 		if("test_9".equals(environment)){
 			pathIP.setEnvironment(environment);
 			pathIP.setServerIP("http://47.96.104.13:7064/");
