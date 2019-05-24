@@ -62,7 +62,7 @@ public class CtripTransServiceImpl implements CtripTransService{
         CtripUser userInfo = new CtripUser();
         userInfo.setIdNo("622726199105222890");
         userInfo.setIdType("1");
-        userInfo.setMobile("15601797971");
+        userInfo.setMobile("19516714383");
         userInfo.setName("马奇");
 
         map.put("userInfo", userInfo);
