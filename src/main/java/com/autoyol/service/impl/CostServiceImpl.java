@@ -173,7 +173,7 @@ public class CostServiceImpl implements CostService {
     public Result getInsureTotalPrices(String carPara, String rentTime, String revertTime, String driLicGetTime, String insurePricesType) {
         Result result = new Result();
 
-        int insureTotalPrices = 0;  //平台保障费
+        double insureTotalPrices = 0;  //平台保障费
         Car car = null;
         Integer guidePurchasePrice = 0;
         if (StringUtils.pathEquals(insurePricesType, "1")) {
@@ -191,14 +191,15 @@ public class CostServiceImpl implements CostService {
             return result;
         }
         logger.info("car：{}",JSON.toJSONString(car));
-        int insuranceValue = car.getInsurance_value();    //平台保障费/日
+//        int insuranceValue = car.getInsurance_value();    //平台保障费/日
 
+//        insureTotalPrices = ToolUtil.floor(rentDays * insuranceValue);
         double rentDays = ToolUtil.getRentDate(rentTime,revertTime);
-        insureTotalPrices = ToolUtil.floor(rentDays * insuranceValue);
 
         Map<String,String> resultMap = getIndex(driLicGetTime);     //计算"租客驾龄系数"
         double index = Double.parseDouble(resultMap.get("index"));  //"租客驾龄系数"
-        insureTotalPrices = ToolUtil.ceil(ToolUtil.ceil(car.getInsurance_value() * index) * rentDays);
+//        insureTotalPrices = ToolUtil.ceil(ToolUtil.ceil(car.getInsurance_value() * index) * rentDays);  // 向上取整
+        insureTotalPrices = ToolUtil.round((ToolUtil.ceil(car.getInsurance_value() * index) * rentDays), 1d);  // 四舍五入
 
         logger.info("租期：{}",rentDays);
         logger.info("平台保障费：{}",resultMap.get("getIndexCost"));
