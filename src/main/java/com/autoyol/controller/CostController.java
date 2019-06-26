@@ -49,7 +49,7 @@ public class CostController {
      */
     @RequestMapping("/abatementInsure")
     @ResponseBody
-    public Result getAbatementInsure(String environment, String mobile, String carPara, String rentTime, String revertTime) {
+    public Result getAbatementInsure(String environment, String mobile, String carPara, String rentTime, String revertTime, String insurePricesType) {
         SetDateSourceUtil.setDataSourceName(environment);
         Result result = new Result();
 
@@ -79,7 +79,7 @@ public class CostController {
 
         //待确认驾龄开始时间根据哪个字段判断
         String startYear = member.getDri_lic_first_time();
-        result = costService.getAbatementInsure(carPara,rentTime,revertTime,startYear);
+        result = costService.getAbatementInsure(carPara, rentTime, revertTime, startYear, insurePricesType);
         if (result.getStatus() == 0) {
             Map<String,String> responseMap = (Map<String,String>) result.getData();
             responseMap.put("startYear",startYear);
@@ -103,7 +103,7 @@ public class CostController {
      */
     @RequestMapping("/insureTotalPrices")
     @ResponseBody
-    public Result getInsureTotalPrices(String environment, String mobile, String carPara, String rentTime, String revertTime) {
+    public Result getInsureTotalPrices(String environment, String mobile, String carPara, String rentTime, String revertTime, String insurePricesType) {
         SetDateSourceUtil.setDataSourceName(environment);
         Result result = new Result();
 
@@ -133,7 +133,7 @@ public class CostController {
 
         //待确认驾龄开始时间根据哪个字段判断
         String startYear = member.getDri_lic_first_time();
-        result = costService.getInsureTotalPrices(carPara,rentTime,revertTime,startYear);
+        result = costService.getInsureTotalPrices(carPara, rentTime, revertTime, startYear, insurePricesType);
         if (result.getStatus() == 0) {
             Map<String,String> responseMap = (Map<String,String>) result.getData();
             responseMap.put("startYear",startYear);

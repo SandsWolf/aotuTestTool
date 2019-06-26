@@ -1,7 +1,9 @@
 package test;
 
 import com.alibaba.fastjson.JSON;
+import com.autoyol.dao.CarMapper;
 import com.autoyol.dao.V43Mapper;
+import com.autoyol.entity.Car;
 import com.autoyol.entity.OrderInfo;
 import com.autoyol.entity.PathIP;
 import com.autoyol.entity.Result;
@@ -31,6 +33,8 @@ public class TestStringUtils {
     private V43Mapper v43Mapper;
     @Resource
     private CostService costService;
+    @Resource
+    private CarMapper carMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(TestStringUtils.class);
 
@@ -137,6 +141,18 @@ public class TestStringUtils {
     }
 
     @Test
+    public void testselectCarInfo() {
+        String environment = "test_1";
+        String carNo = "209756183";
+
+        SetDateSourceUtil.setDataSourceName(environment);
+        PathIP pathIP = ToolUtil.getIP(environment);
+
+        Car car = carMapper.selectCarInfo(carNo);
+        System.out.println(JSON.toJSON(car));
+    }
+
+    @Test
     public void testStringUtils () {
         String environment = "test_1";
         String orderNo = "364896031181";
@@ -191,6 +207,7 @@ public class TestStringUtils {
         }
         System.out.println("------------------");
         System.out.println(JSON.toJSONString(maps));
+
 
     }
 }
