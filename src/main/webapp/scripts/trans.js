@@ -1427,4 +1427,62 @@ function selectCtripInventory(event){
             $("#can").load("alert/alert_error.html");//显示对话框
         }
     });
+    
+
+}
+
+// 修改风控审核状态
+function updateRiskStatus(event) {
+    $("#result_msg").empty();
+    var environment = $("#set_environment").val();
+    var order_no = $("#input_orderNo").val().trim();
+
+    if(environment == "-请选择-"){
+        $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
+        $("#can").load("alert/alert_environment.html");//显示对话框
+        return;
+    }
+
+    if(environment == "线上"){
+        $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
+        $("#can").load("alert/alert_online.html");//显示对话框
+        return;
+    }
+
+    if(order_no == ""){
+        $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
+        $("#can").load("alert/alert_trans_order_no.html");//显示对话框
+        return;
+    }
+
+
+    $.ajax({
+        url:event.data.ip + "/trans/updateRiskStatus",
+        type:"post",
+        data:{"environment":environment,"orderNo":order_no},
+        dataType:"json",
+        success:function(result){
+            if(result.status==1){
+                $("#result_msg").empty();
+
+                var resultMsg = result.data;
+                var li = "<br><span class='sign_span'><b>结果：<br></span><br><span class='sign_span' style='color:red;'>" + resultMsg + "</span></b></span>";
+                var $li = $(li);
+                $("#result_msg").append($li);
+            }
+
+            if(result.status==0){
+                $("#result_msg").empty();
+
+                var resultMsg = result.data;
+                var li = "<br><span class='sign_span'><b>结果：<br>" + resultMsg + "</b></span>";
+                var $li = $(li);
+                $("#result_msg").append($li);
+            }
+        },
+        error:function(){
+            $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
+            $("#can").load("alert/alert_error.html");//显示对话框
+        }
+    });
 }

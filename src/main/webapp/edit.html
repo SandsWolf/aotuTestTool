@@ -39,10 +39,10 @@
 
 	<script type="text/javascript">
         $(function(){
-            var ip = "http://10.0.3.246:1160/";
+            //var ip = "http://10.0.3.246:1160/";
             // var ip = "http://10.0.3.73:8080/test";
             // var ip = "http://10.0.3.73:8090/test";
-            // var ip = "http://localhost:8080/test";
+             var ip = "http://localhost:8080/test";
 
 
             loadToolboxList(ip);
@@ -90,6 +90,7 @@
             $("#tool_content").on("click","#select_CtripInventory",{ip:ip},selectCtripInventory);					//携程套餐查询（MQ）
 
 
+            $("#tool_content").on("click","#update_risk_status",{ip:ip},updateRiskStatus);					//修改风控审核状态
 
 
             //测试数据
