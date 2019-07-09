@@ -1590,33 +1590,10 @@ public class TransServiceImpl implements TransService{
 	 * @return
 	 */
 	public Map<String,String> getDistance(String aLon, String aLat, String bLon, String bLat) {
-		Map<String,String> distanceMap = new HashMap<String, String>();
-
 		Double distance1 = Double.parseDouble(transMapper.getDistance(aLon,aLat,bLon,bLat));      //球面距离
-
-		Double distance2 = 0.0;     //展示距离
-		double ballRatio = 1.0;
-		if(0 < distance1 && distance1 <=5){
-			ballRatio = 1.2;
-			distance2 = distance1 * ballRatio;
-		} else if(5 < distance1 && distance1 <=10){
-			ballRatio = 1.25;
-			distance2 = distance1 * ballRatio;
-		} else if(10 < distance1 && distance1 <=20){
-			ballRatio = 1.3;
-			distance2 = distance1 * ballRatio;
-		} else if(20 < distance1 && distance1 <=30){
-			ballRatio = 1.35;
-			distance2 = distance1 * ballRatio;
-		} else if(30 < distance1){
-			ballRatio = 1.4;
-			distance2 = distance1 * ballRatio;
-		}
-		distance2 = ToolUtil.round(distance2,0.01);
+        Map<String,String> distanceMap = this.getShowDistance(distance1);
 
 		distanceMap.put("distance1","" + ToolUtil.round(distance1,0.01));	//精确到小数点后2位的球面距离
-		distanceMap.put("distance2","" + ToolUtil.round(distance2,0.01));	//精确到小数点后2位的展示距离
-		distanceMap.put("ballRatio","" + ballRatio);
 		return distanceMap;
 	}
 
@@ -1673,78 +1650,91 @@ public class TransServiceImpl implements TransService{
 	 * @return
 	 */
 	public Map<String,String> getDistanceNewRow(String aLon, String aLat, String bLon, String bLat, String distance) {
-		Map<String,String> distanceMap = new HashMap<String, String>();
-
 		Double distance1 = 0.0;  //球面距离
 		if (distance != "") {
 			distance1 = Double.parseDouble(distance);
 		} else {
 			distance1 = Double.parseDouble(transMapper.getDistance(aLon,aLat,bLon,bLat));
 		}
-		double ballRatio = 0.0;
 
-		Double distance2 = 0.0;     //展示距离
-		if(0 < distance1 && distance1 <=5){
-			ballRatio = 1.0;
-			distance2 = distance1 * ballRatio;
-		} else if(5 < distance1 && distance1 <=10){
-			ballRatio = 1.0;
-			distance2 = distance1 * ballRatio;
-		} else if(10 < distance1 && distance1 <=15){
-			ballRatio = 1.1;
-			distance2 = distance1 * ballRatio;
-		} else if(15 < distance1 && distance1 <=20){
-			ballRatio = 1.1;
-			distance2 = distance1 * ballRatio;
-		} else if(20 < distance1 && distance1 <=25){
-			ballRatio = 1.2;
-			distance2 = distance1 * ballRatio;
-		} else if(25 < distance1 && distance1 <=30){
-			ballRatio = 1.6;
-			distance2 = distance1 * ballRatio;
-		} else if(30 < distance1 && distance1 <=35){
-			ballRatio = 1.8;
-			distance2 = distance1 * ballRatio;
-		} else if(35 < distance1 && distance1 <=40){
-			ballRatio = 2.1;
-			distance2 = distance1 * ballRatio;
-		} else if(40 < distance1 && distance1 <=45){
-//			ballRatio = 1.01;
-			ballRatio = 2.4;
-			distance2 = distance1 * ballRatio;
-		} else if(45 < distance1 && distance1 <=50){
-//			ballRatio = 0.96;
-			ballRatio = 2.7;
-			distance2 = distance1 * ballRatio;
-		} else if(50 < distance1 && distance1 <=55){
-//			ballRatio = 0.93;
-			ballRatio = 3.0;
-			distance2 = distance1 * ballRatio;
-		} else if(55 < distance1 && distance1 <=60){
-//			ballRatio = 0.9;
-			ballRatio = 3.3;
-			distance2 = distance1 * ballRatio;
-		} else if(60 < distance1 && distance1 <=75){
-//			ballRatio = 0.9;
-			ballRatio = 3.8;
-			distance2 = distance1 * ballRatio;
-		} else if(75 < distance1 && distance1 <=80){
-//			ballRatio = 0.9;
-			ballRatio = 4.3;
-			distance2 = distance1 * ballRatio;
-		} else if(distance1 > 80){
-			ballRatio = 6.3;
-			distance2 = distance1 * ballRatio;
-		}
-		distance2 = ToolUtil.round(distance2,0.01);
-
-		double distanceRate = this.getDistanceIndex(distance2);	//取还车系数
+        Map<String,String> distanceMap = this.getShowDistance(distance1);
+//		double distanceRate = this.getDistanceIndex(distance2);	//取还车系数
+        double distanceRate = this.getDistanceIndex(Double.parseDouble(distanceMap.get("distance2")));	//取还车系数
 		distanceMap.put("distance1","" + ToolUtil.round(distance1,0.01));	//精确到小数点后2位的球面距离
-		distanceMap.put("distance2","" + ToolUtil.round(distance2,0.01));	//精确到小数点后2位的展示距离
-		distanceMap.put("ballRatio","" + ballRatio);									//球面距离估算系数
 		distanceMap.put("distanceRate","" + distanceRate);								//取还车系数
 		return distanceMap;
 	}
+
+
+    /**
+     * 通过球面距离计算展示距离
+     * @param distance1：球面距离
+     * @return
+     */
+	public Map<String,String> getShowDistance(double distance1) {
+        Map<String,String> distanceMap = new HashMap<String, String>();
+
+        double ballRatio = 0.0;
+        double distance2 = 0.0;     //展示距离
+        if(0 < distance1 && distance1 <=5){
+            ballRatio = 1.0;
+            distance2 = distance1 * ballRatio;
+        } else if(5 < distance1 && distance1 <=10){
+            ballRatio = 1.0;
+            distance2 = distance1 * ballRatio;
+        } else if(10 < distance1 && distance1 <=15){
+            ballRatio = 1.1;
+            distance2 = distance1 * ballRatio;
+        } else if(15 < distance1 && distance1 <=20){
+            ballRatio = 1.1;
+            distance2 = distance1 * ballRatio;
+        } else if(20 < distance1 && distance1 <=25){
+            ballRatio = 1.2;
+            distance2 = distance1 * ballRatio;
+        } else if(25 < distance1 && distance1 <=30){
+            ballRatio = 1.6;
+            distance2 = distance1 * ballRatio;
+        } else if(30 < distance1 && distance1 <=35){
+            ballRatio = 1.8;
+            distance2 = distance1 * ballRatio;
+        } else if(35 < distance1 && distance1 <=40){
+            ballRatio = 2.1;
+            distance2 = distance1 * ballRatio;
+        } else if(40 < distance1 && distance1 <=45){
+//			ballRatio = 1.01;
+            ballRatio = 2.4;
+            distance2 = distance1 * ballRatio;
+        } else if(45 < distance1 && distance1 <=50){
+//			ballRatio = 0.96;
+            ballRatio = 2.7;
+            distance2 = distance1 * ballRatio;
+        } else if(50 < distance1 && distance1 <=55){
+//			ballRatio = 0.93;
+            ballRatio = 3.0;
+            distance2 = distance1 * ballRatio;
+        } else if(55 < distance1 && distance1 <=60){
+//			ballRatio = 0.9;
+            ballRatio = 3.3;
+            distance2 = distance1 * ballRatio;
+        } else if(60 < distance1 && distance1 <=75){
+//			ballRatio = 0.9;
+            ballRatio = 3.8;
+            distance2 = distance1 * ballRatio;
+        } else if(75 < distance1 && distance1 <=80){
+//			ballRatio = 0.9;
+            ballRatio = 4.3;
+            distance2 = distance1 * ballRatio;
+        } else if(distance1 > 80){
+            ballRatio = 6.3;
+            distance2 = distance1 * ballRatio;
+        }
+        distance2 = ToolUtil.round(distance2,0.01);
+
+        distanceMap.put("distance2","" + ToolUtil.round(distance2,0.01));	//精确到小数点后2位的展示距离
+        distanceMap.put("ballRatio","" + ballRatio);									//球面距离估算系数
+
+        return distanceMap;
+    }
 
 
 	/**
