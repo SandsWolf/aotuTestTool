@@ -4,6 +4,7 @@ import com.autoyol.dao.MemberMapper;
 import com.autoyol.entity.Member;
 import com.autoyol.entity.PathIP;
 import com.autoyol.entity.Result;
+import com.autoyol.service.InsertCouponService;
 import com.autoyol.service.MemberService;
 import com.autoyol.util.SetDateSourceUtil;
 import com.autoyol.util.ToolUtil;
@@ -23,6 +24,8 @@ public class MemberController {
 	private MemberService memberService;
 	@Resource
 	private MemberMapper memberMapper;
+	@Resource
+	private InsertCouponService insertCouponService;
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
@@ -129,7 +132,7 @@ public class MemberController {
 	 */
 	@RequestMapping("/getMobileOrToken")
 	@ResponseBody
-	public Result getMobileOrToken(String environment, String value){
+	public Result getMobileOrToken(String environment, String value) {
 		SetDateSourceUtil.setDataSourceName(environment);
 		Result result = new Result();
 
@@ -142,16 +145,45 @@ public class MemberController {
 					result.setData("手机号：\"" + value + "\"不存在 ; 请确认后再试");
 					return result;
 				} else {
-                    result = memberService.getMobileOrToken(environment,value);
-                }
+					result = memberService.getMobileOrToken(environment, value);
+				}
 
 			} catch (Exception e) {
-				logger.error("查询用户信息异常",e);
+				logger.error("查询用户信息异常", e);
 			}
 		} else {
-            result = memberService.getMobileOrToken(environment,value);
-        }
+			result = memberService.getMobileOrToken(environment, value);
+		}
 
 		return result;
 	}
+
+
+	/**
+	 * 给会员插入优惠券数据
+	 * @param environment
+	 * @param value
+	 * @return
+	 */
+	@RequestMapping("/insertCoupon")
+	@ResponseBody
+	public Result insertCoupon(String environment, String value){
+		SetDateSourceUtil.setDataSourceName(environment);
+		Result result = new Result();
+
+		if (value.length() == 11) {
+			insertCouponService.insertCoupon(value);
+			result.setStatus(1);
+			result.setMsg("success");
+			result.setData("优惠券插入成功");
+
+		} else {
+			result.setStatus(1);
+			result.setMsg("success");
+			result.setData("手机号输入不正确，请检查");
+
+		}
+		return result;
+	}
+
 }
