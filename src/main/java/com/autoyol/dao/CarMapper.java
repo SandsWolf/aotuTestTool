@@ -12,7 +12,8 @@ public interface CarMapper {
     public Car selectCarInfo(String carPara);
     public void deleteTransFilter(String carNo);
     public void deleteCarFilter(String carNo);
-    public Car selectInsureTotalPrices(String carPara);
+    public Car selectInsureTotalPricesByGuidePurchasePrice(String carPara);
+    public Car selectInsureTotalPricesByGuidePrice(String carPara);
     public DepositConfig selectCarDepositAmtInCityCode(String carNo);
     public DepositConfig selectCarDepositAmtOutCityCode(String carNo);
     public List<DepositConfig> selectIDepositTextCode();

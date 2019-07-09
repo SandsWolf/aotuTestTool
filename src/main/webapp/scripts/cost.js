@@ -6,6 +6,7 @@ function getAbatementInsure(event){
     var carPara = $("#input_carNo").val().trim();
     var rentTime = $("#input_rentTime").val().trim();
     var revertTime = $("#input_revertTime").val();
+    var insurePricesType = $('input:radio[name=abatementInsure]:checked').val();
 
     if(environment == "-请选择-"){
         $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
@@ -37,7 +38,7 @@ function getAbatementInsure(event){
     $.ajax({
         url:event.data.ip + "/cost/abatementInsure",
         type:"post",
-        data:{"environment":environment,"mobile":mobile,"carPara":carPara,"rentTime":rentTime,"revertTime":revertTime},
+        data:{"environment":environment,"mobile":mobile,"carPara":carPara,"rentTime":rentTime,"revertTime":revertTime, "insurePricesType":insurePricesType},
         dataType:"json",
         success:function(result){
             if(result.status==1){
@@ -83,6 +84,7 @@ function getInsureTotalPrices(event){
     var carPara = $("#input_carNo").val().trim();
     var rentTime = $("#input_rentTime").val().trim();
     var revertTime = $("#input_revertTime").val();
+    var insurePricesType = $('input:radio[name=insurePrices]:checked').val();
 
     if(environment == "-请选择-"){
         $(".opacity_bg").show();//弹出对话框后背景置灰，防止误操作
@@ -114,7 +116,7 @@ function getInsureTotalPrices(event){
     $.ajax({
         url:event.data.ip + "/cost/insureTotalPrices",
         type:"post",
-        data:{"environment":environment,"mobile":mobile,"carPara":carPara,"rentTime":rentTime,"revertTime":revertTime},
+        data:{"environment":environment,"mobile":mobile,"carPara":carPara,"rentTime":rentTime,"revertTime":revertTime, "insurePricesType":insurePricesType},
         dataType:"json",
         success:function(result){
             if(result.status==1){

@@ -53,7 +53,7 @@ public class CostServiceImpl implements CostService {
      * @param driLicGetTime     驾驶证生效时间，格式：yyyy-MM-dd
      * @return
      */
-    public Result getAbatementInsure(String carPara, String rentTime, String revertTime, String driLicGetTime) {
+    public Result getAbatementInsure(String carPara, String rentTime, String revertTime, String driLicGetTime, String insurePricesType) {
         Result result = new Result();
         Map<String,String> responseMap = new HashMap<String,String>();
         Car car = carMapper.selectCarInfo(carPara);
@@ -65,18 +65,26 @@ public class CostServiceImpl implements CostService {
             return result;
         }
 
-        int guidePurchasePrice = car.getGuide_purchase_price();         //车辆购置价
+        int guidePurchasePrice = 0;
+        if (StringUtils.pathEquals(insurePricesType, "1")) {
+            guidePurchasePrice = car.getGuide_purchase_price();         //车辆购置价
+        } else if (StringUtils.pathEquals(insurePricesType, "0")) {
+            guidePurchasePrice = car.getGuide_price();
+        }
+        System.out.println(guidePurchasePrice);
         double rentDays = ToolUtil.getRentDate(rentTime,revertTime);    //租期天数
         logger.info("租期天数：{}",rentDays);
 
-        Integer[] partOne = {40,30,25,20};
-        Integer[] partTwo = {50,40,35,30};
-        Integer[] partThree = {80,60,50,40};
+        Integer[] partOne = {40, 30, 25, 20};
+        Integer[] partTwo = {50, 40, 35, 30};
+        Integer[] partThree = {80, 60, 50, 40};
+        Integer[] partFour = {1500, 1500, 1500, 1500};
 
         Map<String,List<Integer>> map = new HashMap<String, List<Integer>>();
         map.put("partOne",Arrays.asList(partOne));
         map.put("partTwo",Arrays.asList(partTwo));
         map.put("partThree",Arrays.asList(partThree));
+        map.put("partFour",Arrays.asList(partFour));
 
         List<Integer> priceList = new ArrayList<Integer>();
         if (guidePurchasePrice < 250000) {
@@ -89,10 +97,15 @@ public class CostServiceImpl implements CostService {
             responseMap.put("priceList","取第二段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
             logger.info("车辆购置价：{},取第二段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
         }
-        if (guidePurchasePrice > 400000) {
+        if (guidePurchasePrice > 400000 && guidePurchasePrice < 1500000) {
             priceList = map.get("partThree");
             responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
             logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+        }
+        if (guidePurchasePrice >= 1500000) {
+            priceList = map.get("partFour");
+            responseMap.put("priceList","取第四段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+            logger.info("车辆购置价：{},取第四段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
         }
 
         int abatementInsure = 0;  //全面保障服务费
@@ -157,11 +170,19 @@ public class CostServiceImpl implements CostService {
      * @param driLicGetTime     驾驶证生效时间，格式：yyyy-MM-dd
      * @return
      */
-    public Result getInsureTotalPrices(String carPara, String rentTime, String revertTime, String driLicGetTime) {
+    public Result getInsureTotalPrices(String carPara, String rentTime, String revertTime, String driLicGetTime, String insurePricesType) {
         Result result = new Result();
 
         int insureTotalPrices = 0;  //平台保障费
-        Car car = carMapper.selectInsureTotalPrices(carPara);
+        Car car = null;
+        Integer guidePurchasePrice = 0;
+        if (StringUtils.pathEquals(insurePricesType, "1")) {
+            car = carMapper.selectInsureTotalPricesByGuidePurchasePrice(carPara);
+            guidePurchasePrice = car.getGuide_purchase_price();
+        } else if (StringUtils.pathEquals(insurePricesType, "0")) {
+            car = carMapper.selectInsureTotalPricesByGuidePrice(carPara);
+            guidePurchasePrice = car.getGuide_price();
+        }
         if(car == null) {
             logger.info("车辆不满足判断条件");
             result.setStatus(1);
@@ -170,20 +191,21 @@ public class CostServiceImpl implements CostService {
             return result;
         }
         logger.info("car：{}",JSON.toJSONString(car));
-        int insuranceValue = car.getInsurance_value();    //平台保障费/日
+//        int insuranceValue = car.getInsurance_value();    //平台保障费/日
 
+//        insureTotalPrices = ToolUtil.floor(rentDays * insuranceValue);
         double rentDays = ToolUtil.getRentDate(rentTime,revertTime);
-        insureTotalPrices = ToolUtil.floor(rentDays * insuranceValue);
 
         Map<String,String> resultMap = getIndex(driLicGetTime);     //计算"租客驾龄系数"
         double index = Double.parseDouble(resultMap.get("index"));  //"租客驾龄系数"
-        insureTotalPrices = ToolUtil.floor(ToolUtil.ceil(car.getInsurance_value() * index) * rentDays);
+        insureTotalPrices = ToolUtil.ceil(ToolUtil.ceil(car.getInsurance_value() * index) * rentDays);  // 向上取整
+//        insureTotalPrices = ToolUtil.round((ToolUtil.ceil(car.getInsurance_value() * index) * rentDays), 1d);  // 四舍五入
 
         logger.info("租期：{}",rentDays);
         logger.info("平台保障费：{}",resultMap.get("getIndexCost"));
 
         Map<String,String> responseMap = new HashMap<String,String>();
-        responseMap.put("guidePurchasePrice","" + car.getGuide_purchase_price());       //车辆购置价
+        responseMap.put("guidePurchasePrice","" + guidePurchasePrice);       //车辆购置价
         responseMap.put("insuranceValue","" + car.getInsurance_value());                 //平台保障费/日
         responseMap.put("rentDays","" + rentDays);        //租期
         responseMap.put("index",resultMap.get("index"));  //驾龄系数

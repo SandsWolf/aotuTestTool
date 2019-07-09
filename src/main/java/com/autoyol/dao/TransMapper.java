@@ -24,7 +24,7 @@ public interface TransMapper {
 	public void deleteTransIllegalSettleFlag(String orderNo);
 	public void insertTransIllegalSettleFlag(String orderNo);
 	public String selectGetBackCarFeeConfig (Map<String, String> paraMap);
-
+	public void updateRiskStatus(String orderNo);
 
 
 	//测试用

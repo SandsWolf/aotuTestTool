@@ -168,7 +168,7 @@ function selectMemCarCount(event){
 
 
 //收藏车辆
-function selectMemCarCount(event){
+function sumbitCarFavorit(event){
     $("#result_msg").empty();
     var environment = $("#set_environment").val();
     var mobile = $("#input_mobile").val().trim();

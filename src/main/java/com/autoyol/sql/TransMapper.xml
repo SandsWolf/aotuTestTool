@@ -206,6 +206,10 @@
     	SELECT rule_content FROM `fetchback_car_fee_config_prepare_process` WHERE city_code=#{cityCode} AND rule_date=#{ruleDate}
     </select>
 
+	<!-- 修改订单风控审核状态 -->
+	<update id  = "updateRiskStatus" parameterType="Map">
+		UPDATE `atzuchedb`.`trans` SET risk_status = 3 WHERE order_no = #{orderNo}
+	</update>
 
 
 

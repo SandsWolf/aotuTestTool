@@ -7,6 +7,7 @@
           reg_no,
           plate_num,
           guide_purchase_price,
+          guide_price,
           surplus_price,
           city,
           brand,
@@ -19,8 +20,8 @@
         WHERE reg_no = #{carPara} OR plate_num = #{carPara}
 	</select>
 
-    <!--根据carNo连表查询计算"平台保障费" -->
-    <select id="selectInsureTotalPrices" parameterType="String" resultType="com.autoyol.entity.Car">
+    <!--根据carNo连表查询计算"平台保障费"，用guide_purchase_price计算 -->
+    <select id="selectInsureTotalPricesByGuidePurchasePrice" parameterType="String" resultType="com.autoyol.entity.Car">
         SELECT
           a.reg_no,
           a.guide_purchase_price,
@@ -44,6 +45,34 @@
         AND a.guide_purchase_price &lt;= b.guid_price_end)
         OR
         (a.guide_purchase_price &gt; b.guid_price_begin
+        AND b.guid_price_end = -1)
+    </select>
+
+    <!--根据carNo连表查询计算"平台保障费"，用guide_price计算 -->
+    <select id="selectInsureTotalPricesByGuidePrice" parameterType="String" resultType="com.autoyol.entity.Car">
+        SELECT
+          a.reg_no,
+          a.guide_price,
+          b.guid_price_begin,
+          b.guid_price_end,
+          b.insurance_value
+        FROM
+          (SELECT
+            reg_no,
+            guide_price
+          FROM car
+          WHERE reg_no = #{carPara} OR plate_num = #{carPara}) a
+          LEFT JOIN
+          (SELECT
+            guid_price_begin,
+            guid_price_end,
+            insurance_value
+          FROM insurance_config) b
+        ON
+        (a.guide_price &gt; b.guid_price_begin
+        AND a.guide_price &lt;= b.guid_price_end)
+        OR
+        (a.guide_price &gt; b.guid_price_begin
         AND b.guid_price_end = -1)
     </select>
 

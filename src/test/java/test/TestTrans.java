@@ -137,6 +137,19 @@ public class TestTrans {
     }
 
     /**
+     * 修改订单风控审核状态，使订单能修改
+     */
+    @Test
+    public void testUpdateRiskStatus(){
+        System.out.println("123");
+        String environment = "test_2";
+        SetDateSourceUtil.setDataSourceName(environment);
+
+        transMapper.updateRiskStatus("559172207091");
+        System.out.println("223");
+    }
+
+    /**
      * 测试根据手机号查询车辆数量
      */
     @Test

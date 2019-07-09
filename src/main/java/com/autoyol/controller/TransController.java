@@ -9,10 +9,12 @@ import com.autoyol.service.TransService;
 import com.autoyol.service.impl.TimeServiceImpl;
 import com.autoyol.util.SetDateSourceUtil;
 import com.autoyol.util.ToolUtil;
+import org.apache.ibatis.annotations.ResultMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -865,5 +867,42 @@ public class TransController {
 		return result;
 	}
 
+	/**
+	 * 修改订单风控审核状态至3，使其能修改订单
+	 * @param environment
+	 * @param orderNo
+	 * @return
+	 */
+	@RequestMapping("/updateRiskStatus")
+	@ResponseBody
+	public Result updateRiskStatus(String environment,String orderNo){
+		Result result = new Result();
+		if("线上".equals(environment)){
+			result.setStatus(1);
+			result.setMsg("success");
+			result.setData("线上环境只能做查询操作");
+			return result;
+		}
+
+		SetDateSourceUtil.setDataSourceName(environment);
+		PathIP pathIP = ToolUtil.getIP(environment);
+
+
+		Trans trans = transMapper.selectTransByorderNo(orderNo);
+
+		if(trans == null){
+			logger.info("订单号：{}不存在",orderNo);
+			result.setStatus(0);
+			result.setMsg("success");
+			result.setData("<span class='sign_span' style='color:red;'>订单号不存在，请确认环境或订单号是否正确</span>");
+			return result;
+		}else{
+			transMapper.updateRiskStatus(orderNo);
+			result.setStatus(000000);
+			result.setMsg("success");
+			result.setData(orderNo + "修改订单风控状态成功，可进行修改订单操作！！！");
+		}
+		return result;
+	}
 
 }
