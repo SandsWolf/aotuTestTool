@@ -26,7 +26,7 @@ public class InsertCouponServiceImpl implements InsertCouponService {
 
         String memNo = members.get(0).getReg_no();
 
-        String random = "";
+        String random = "A";
         for (int i=0;i<10; i++) {
             int j = (int) (Math.random()*100);
             random = random + j;
