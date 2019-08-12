@@ -228,13 +228,61 @@ public class ToolUtil {
 
 
 	/**
+	 * 原始租期计算(保留小数点后3位小数)
+	 * @param getTime
+	 * @param returnTime
+	 * @return
+	 */
+	public static double getRawRentDate(String getTime, String returnTime){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		double day = 0;
+
+		try {
+			Date date1 = sdf.parse(getTime);
+			Date date2 = sdf.parse(returnTime);
+
+			long time1 = date1.getTime();
+			long time2 = date2.getTime();
+
+//			logger.info(time1);
+//			logger.info(time2);
+
+			long time = time2 - time1;
+			long dl = time%(24*60*60*1000);	//不满一天
+			long hl = dl%(60*60*1000);		//不满一小时
+
+			day = (time-dl)/(24*60*60*1000d);			//天
+			double hour = (dl-hl)/(60*60*1000d);		//小时
+			double minute = hl/(60* 1000d);				//分钟
+
+//			logger.info(day+"天");
+//			logger.info(hour+"小时");
+//			logger.info(minute+"分钟");
+
+			if(minute!=0){
+				hour += 1;
+			}
+
+			if(hour>=8){
+				day += 1;
+			}else{
+				day += hour/8;
+			}
+		} catch (Exception e) {
+			logger.error("租期计算(四舍五入、保留小数点后2位)异常：",e);
+		}
+		return day;
+	}
+
+
+	/**
 	 * 租期计算(四舍五入、保留小数点后2位)
 	 * @param getTime
 	 * @param returnTime
 	 * @return
 	 */
 	public static double getRentDate(String getTime, String returnTime){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+ 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		double day = 0;
 
 		try {

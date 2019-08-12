@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -217,18 +218,56 @@ public class TestTrans {
 
     }
 
+    @Test
+    public void testErrCheckFlag () {
+        String environment = "test_5";    // test1 取还车费用 系数库
+        SetDateSourceUtil.setDataSourceName(environment);
+        PathIP pathIP = ToolUtil.getIP(environment);
+
+        String time = "30";
+        Map<String, String> map = new HashMap<>();
+
+        if (!"".equals(time)) {
+            try {
+
+                Date date = new Date();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                cal.add(Calendar.MINUTE, Integer.parseInt(time));
+
+                String dateFormat = "yyyy-MM-dd HH:mm:ss";
+                SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+                String endTime = sdf.format(cal.getTime());
+
+                System.out.println("日期：" + endTime);
+
+                map.put("minute", time);
+                map.put("endTime", endTime);
+                otherFunctionMapper.updateErrorLogCheckFlag(map);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else {
+            map.put("minute", "");
+            map.put("endTime", "");
+            otherFunctionMapper.updateErrorLogCheckFlag(map);
+        }
+
+
+
+
+    }
+
 
 
 
 
     public static void main(String[] args) {
-        String a = "ruleContent\": \"{\"cityCode\":310100,\"ruleDate\":20190320,\"carBaseFeeVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"carBaseFeeRule\":{\"orderFee\":30.00,\"packageFee\":50.00}},\"dateCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"defaultCoefficient\":2.00,\"dateCoefficientDetailVoList\":[{\"detailName\":\"x\",\"startDate\":20190314,\"endDate\":20190419,\"coefficient\":1.50},{\"detailName\":\"x\",\"startDate\":20190420,\"endDate\":20190425,\"coefficient\":0.00}]},\"timePeriodCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"defaultCoefficient\":0.00,\"timePeriodDetailVoList\":[{\"detailName\":\"x\",\"startTimeperiod\":15,\"endTimeperiod\":100,\"coefficient\":2.00},{\"detailName\":\"x\",\"startTimeperiod\":415,\"endTimeperiod\":600,\"coefficient\":3.00},{\"detailName\":\"x\",\"startTimeperiod\":1015,\"endTimeperiod\":1245,\"coefficient\":0.40},{\"detailName\":\"x\",\"startTimeperiod\":1700,\"endTimeperiod\":2000,\"coefficient\":0.60}]},\"distanceCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"defaultCoefficient\":2.00,\"distanceDetailVoList\":[{\"detailName\":\"x\",\"distanceLeft\":0.00,\"distanceRight\":0.00,\"coefficient\":1.00},{\"detailName\":\"x\",\"distanceLeft\":0.00,\"distanceRight\":5.00,\"coefficient\":1.50},{\"detailName\":\"x\",\"distanceLeft\":5.00,\"distanceRight\":10000.00,\"coefficient\":3.00}]},\"carFeeCicrleVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"circleVersion\":1,\"defaultCoefficient\":2.00,\"carFeeCicrleRule\":[{\"id\":\"114\",\"detailName\":\"内圈\",\"cicrleContent\":\"xxxxx\",\"coefficient\":2.00,\"circleVersion\":1}]},\"carFeeChannelCoefficientVo\":{\"cityCode\":310100,\"ruleDate\":20190320,\"carFeeChannelRules\":[{\"channelName\":\"default\",\"coefficient\":1.00},{\"channelName\":\"app\",\"coefficient\":1.00},{\"channelName\":\"ota\",\"coefficient\":0.00},{\"channelName\":\"scooter\",\"coefficient\":0.00}]}}";
+        String nowTime = ToolUtil.getTime2((new Date()).getTime());
+        String realRevertTime = ToolUtil.addDay(nowTime, -18);	//实际还车时间改18天前
+        realRevertTime = ToolUtil.addHour(realRevertTime, -1);	//1小时前
 
-//        Map<String, Object> map = (Map)JSON.parseObject(a);
-        System.out.println(JSON.toJSONString(a));
-
-
-        Double x = 6.8120d;
+        System.out.println(realRevertTime);
     }
 
 

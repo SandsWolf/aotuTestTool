@@ -5,6 +5,7 @@ import com.autoyol.entity.IllegalQueryDayConf;
 import com.autoyol.entity.TransModificationApplication;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OtherFunctionMapper {
 	public IllegalQueryDayConf selectIllegalQueryDayConf(String city);	//查"上海"的违章押金结算时间配置表
@@ -18,4 +19,5 @@ public interface OtherFunctionMapper {
 	public List<City> selectCityList();
 	public City selectCityByCode(String cityCode);
 //	public Map<String,Object> getSysConstantByCode(@Param("code")String code);
+	public void updateErrorLogCheckFlag(Map paraMap);
 }

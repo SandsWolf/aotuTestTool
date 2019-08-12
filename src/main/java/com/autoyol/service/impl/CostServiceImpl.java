@@ -71,41 +71,146 @@ public class CostServiceImpl implements CostService {
         } else if (StringUtils.pathEquals(insurePricesType, "0")) {
             guidePurchasePrice = car.getGuide_price();
         }
-        System.out.println(guidePurchasePrice);
+        logger.info("购买指导价：{}",guidePurchasePrice);
         double rentDays = ToolUtil.getRentDate(rentTime,revertTime);    //租期天数
         logger.info("租期天数：{}",rentDays);
 
-        Integer[] partOne = {40, 30, 25, 20};
-        Integer[] partTwo = {50, 40, 35, 30};
-        Integer[] partThree = {80, 60, 50, 40};
-        Integer[] partFour = {1500, 1500, 1500, 1500};
-
-        Map<String,List<Integer>> map = new HashMap<String, List<Integer>>();
-        map.put("partOne",Arrays.asList(partOne));
-        map.put("partTwo",Arrays.asList(partTwo));
-        map.put("partThree",Arrays.asList(partThree));
-        map.put("partFour",Arrays.asList(partFour));
-
         List<Integer> priceList = new ArrayList<Integer>();
-        if (guidePurchasePrice < 250000) {
-            priceList = map.get("partOne");
-            responseMap.put("priceList","取第一段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
-            logger.info("车辆购置价：{},取第一段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
-        }
-        if (guidePurchasePrice >= 250000 && guidePurchasePrice <= 400000) {
-            priceList = map.get("partTwo");
-            responseMap.put("priceList","取第二段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
-            logger.info("车辆购置价：{},取第二段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
-        }
-        if (guidePurchasePrice > 400000 && guidePurchasePrice < 1500000) {
-            priceList = map.get("partThree");
-            responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
-            logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
-        }
-        if (guidePurchasePrice >= 1500000) {
-            priceList = map.get("partFour");
-            responseMap.put("priceList","取第四段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
-            logger.info("车辆购置价：{},取第四段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+        Map<String,List<Integer>> map = new HashMap<String, List<Integer>>();
+
+
+
+        boolean isNew = true;
+
+        if (isNew) {
+            Integer[] partOne = {40, 30, 25, 20};
+            Integer[] partTwo = {50, 40, 35, 30};
+            Integer[] partThree = {80, 60, 50, 40};
+            Integer[] partFour = {90, 70, 60, 50};
+            Integer[] partFive = {100, 80, 70, 60};
+            Integer[] partSix = {225, 180, 144, 115};
+            Integer[] partSeven = {300, 240, 192, 154};
+            Integer[] partEight = {375, 300, 240, 192};
+            Integer[] partNine = {450, 360, 288, 230};
+            Integer[] partTen = {525, 420, 336, 269};
+            Integer[] partEleven = {600, 480, 384, 307};
+            Integer[] partTwelve = {675, 540, 432, 346};
+            Integer[] partThirteen = {750, 600, 480, 384};
+
+            map.put("partOne",Arrays.asList(partOne));
+            map.put("partTwo",Arrays.asList(partTwo));
+            map.put("partThree",Arrays.asList(partThree));
+            map.put("partFour",Arrays.asList(partFour));
+            map.put("partFive",Arrays.asList(partFive));
+            map.put("partSix",Arrays.asList(partSix));
+            map.put("partSeven",Arrays.asList(partSeven));
+            map.put("partEight",Arrays.asList(partEight));
+            map.put("partNine",Arrays.asList(partNine));
+            map.put("partTen",Arrays.asList(partTen));
+            map.put("partEleven",Arrays.asList(partEleven));
+            map.put("partTwelve",Arrays.asList(partTwelve));
+            map.put("partThirteen",Arrays.asList(partThirteen));
+
+            try {
+                if (guidePurchasePrice <= 250000) {
+                    priceList = map.get("partOne");
+                    responseMap.put("priceList","取第一段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第一段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 250000 && guidePurchasePrice <= 400000) {
+                    priceList = map.get("partTwo");
+                    responseMap.put("priceList","取第二段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第二段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 400000 && guidePurchasePrice <= 600000) {
+                    priceList = map.get("partThree");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 600000 && guidePurchasePrice <= 800000) {
+                    priceList = map.get("partFour");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 800000 && guidePurchasePrice <= 1000000) {
+                    priceList = map.get("partFive");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 1000000 && guidePurchasePrice <= 1500000) {
+                    priceList = map.get("partSix");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 1500000 && guidePurchasePrice <= 2000000) {
+                    priceList = map.get("partSeven");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 2000000 && guidePurchasePrice <= 2500000) {
+                    priceList = map.get("partEight");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 2500000 && guidePurchasePrice <= 3000000) {
+                    priceList = map.get("partNine");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 3000000 && guidePurchasePrice <= 3500000) {
+                    priceList = map.get("partTen");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 3500000 && guidePurchasePrice <= 4000000) {
+                    priceList = map.get("partEleven");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice > 4000000 && guidePurchasePrice <= 4500000) {
+                    priceList = map.get("partTwelve");
+                    responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+                if (guidePurchasePrice >= 4500000) {
+                    priceList = map.get("partThirteen");
+                    responseMap.put("priceList","取第四段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                    logger.info("车辆购置价：{},取第四段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Integer[] partOne = {40, 30, 25, 20};
+            Integer[] partTwo = {50, 40, 35, 30};
+            Integer[] partThree = {80, 60, 50, 40};
+            Integer[] partFour = {1500, 1500, 1500, 1500};
+
+            map.put("partOne",Arrays.asList(partOne));
+            map.put("partTwo",Arrays.asList(partTwo));
+            map.put("partThree",Arrays.asList(partThree));
+            map.put("partFour",Arrays.asList(partFour));
+
+            if (guidePurchasePrice < 250000) {
+                priceList = map.get("partOne");
+                responseMap.put("priceList","取第一段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                logger.info("车辆购置价：{},取第一段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+            }
+            if (guidePurchasePrice >= 250000 && guidePurchasePrice <= 400000) {
+                priceList = map.get("partTwo");
+                responseMap.put("priceList","取第二段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                logger.info("车辆购置价：{},取第二段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+            }
+            if (guidePurchasePrice > 400000 && guidePurchasePrice < 1500000) {
+                priceList = map.get("partThree");
+                responseMap.put("priceList","取第三段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                logger.info("车辆购置价：{},取第三段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+            }
+            if (guidePurchasePrice >= 1500000) {
+                priceList = map.get("partFour");
+                responseMap.put("priceList","取第四段费用：{" + priceList.get(0) + "," + priceList.get(1) + "," + priceList.get(2) + "," + priceList.get(3) + "}");
+                logger.info("车辆购置价：{},取第四段费用：{},{},{},{}",new int[]{guidePurchasePrice,priceList.get(0),priceList.get(1),priceList.get(2),priceList.get(3)});
+            }
         }
 
         int abatementInsure = 0;  //全面保障服务费
@@ -194,7 +299,8 @@ public class CostServiceImpl implements CostService {
 //        int insuranceValue = car.getInsurance_value();    //平台保障费/日
 
 //        insureTotalPrices = ToolUtil.floor(rentDays * insuranceValue);
-        double rentDays = ToolUtil.getRentDate(rentTime,revertTime);
+//        double rentDays = ToolUtil.getRentDate(rentTime,revertTime);
+        double rentDays = ToolUtil.getRawRentDate(rentTime,revertTime);
 
         Map<String,String> resultMap = getIndex(driLicGetTime);     //计算"租客驾龄系数"
         double index = Double.parseDouble(resultMap.get("index"));  //"租客驾龄系数"

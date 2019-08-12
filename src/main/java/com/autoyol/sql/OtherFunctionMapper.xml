@@ -67,6 +67,15 @@
 	</select>
 
 
+
+	<update id="updateErrorLogCheckFlag" parameterType="Map">
+		UPDATE `err_log_db`.`system_config` SET
+			`VALUE` = #{minute},
+			`txt` = #{endTime}
+		WHERE `sys_type` = "check_setting" and `KEY` = "limit_check_flag"
+	</update>
+
+
 	<!--&lt;!&ndash; 根据编码获取系统常量 &ndash;&gt;-->
 	<!--<select id="getSysConstantByCode" resultType="map">-->
     	<!--select id,c_name,c_code,c_value from sys_constant sc where sc.c_code in (#{code})-->
